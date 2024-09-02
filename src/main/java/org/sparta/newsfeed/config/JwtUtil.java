@@ -18,7 +18,7 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private static final String BEARER_PREFIX = "Bearer";
+    private static final String BEARER_PREFIX = "Bearer ";
     private static final long TOKEN_TIME =  30 * 60 * 1000L;    //30분
 
     @Value("${jwt.secret.key}")
