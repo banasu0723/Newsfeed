@@ -106,7 +106,7 @@ public class AuthService {
     }
 
     @Transactional
-    public Void singDelete(AuthUser authUser, SignDeleteRequestDto signDeleteRequestDto) {
+    public Void signDelete(AuthUser authUser, SignDeleteRequestDto signDeleteRequestDto) {
         User user = userRepository.findById(authUser.getId())
                 .orElseThrow(() -> new NullPointerException("잘못된 유저정보 입니다."));
 
@@ -132,6 +132,10 @@ public class AuthService {
 
         if (!passwordEncoder.matches(signinRequestDto.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("잘못된 비밀번호 입니다.");
+        }
+
+        if(!user.isActivate()){
+            throw new IllegalArgumentException("이미 탈퇴한 사용자 입니다.");
         }
 
         String bearerToken = jwtUtil.createToken(

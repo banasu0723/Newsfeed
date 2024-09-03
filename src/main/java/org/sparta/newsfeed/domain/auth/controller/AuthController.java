@@ -37,7 +37,7 @@ public class AuthController {
 
     @PostMapping("/auth/signdelete")
     public ResponseEntity<Void> singDelete(@Auth AuthUser authUser, @RequestBody SignDeleteRequestDto signDeleteRequestDto){
-        return ResponseEntity.ok(authService.singDelete(authUser,signDeleteRequestDto));
+        return ResponseEntity.ok(authService.signDelete(authUser,signDeleteRequestDto));
     }
 
     @PostMapping("/auth/signin")
