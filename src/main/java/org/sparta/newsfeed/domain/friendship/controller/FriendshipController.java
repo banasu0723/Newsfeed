@@ -38,8 +38,16 @@ public class FriendshipController {
 
         String loginUserEmail = request.getAttribute("email").toString();
 
-//        String loginUserEmail = jwtUtil.getEmailFromRequest(request);
         friendshipService.requestFriendship(requestDto, loginUserEmail);
         return ResponseEntity.ok("친구 요청 완료");
     }
+
+    // 친구 요청 수락
+    @PutMapping("/{friendshipId}")
+    public ResponseEntity<String> acceptFriendship(@PathVariable("friendshipId") Long friendshipId) {
+
+        friendshipService.acceptFriendship(friendshipId);
+        return ResponseEntity.ok("친구 요청 수락 완료");
+    }
+
 }

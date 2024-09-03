@@ -81,5 +81,18 @@ public class FriendshipService {
 
     }
 
+    // 친구 요청 수락
+    public void acceptFriendship(Long friendshipId) {
 
+
+        Friendship acceptFriendship = friendshipRepository.findById(friendshipId)
+                .orElseThrow(() -> new NoSuchElementException("해당 친구 요청은 존재하지 않습니다."));
+
+        Friendship counterpartFriendship = friendshipRepository.findById(acceptFriendship.getFriendId())
+                .orElseThrow(() -> new NoSuchElementException("친구 요청 조회 실패"));
+
+        acceptFriendship.acceptFriendshipRequest();
+        counterpartFriendship.acceptFriendshipRequest();
+
+    }
 }
