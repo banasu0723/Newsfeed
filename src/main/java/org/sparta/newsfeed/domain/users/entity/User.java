@@ -26,7 +26,7 @@ public class User extends Timestamped {
     private boolean activate;
 
     // 친구 리스트
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "user")
     private List<Friendship> friendshipUserList = new ArrayList<>();
 
 

@@ -2,6 +2,7 @@ package org.sparta.newsfeed.domain.friendship.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sparta.newsfeed.domain.friendship.FriendshipRequestStatus;
 import org.sparta.newsfeed.domain.friendship.FriendshipStatus;
 import org.sparta.newsfeed.domain.friendship.dto.FriendshipRequestDto;
 import org.sparta.newsfeed.domain.friendship.repository.FriendshipRepository;
@@ -44,6 +45,9 @@ public class FriendshipService {
         User responseUser = userRepository.findByEmail(requestDto.getEmail())
                 .orElseThrow(() -> new NoSuchElementException("검색한 이메일 계정은 존재하지 않습니다."));
 
+        if (requestUser.getId() == responseUser.getId()) {
+            throw new IllegalArgumentException("자기 자신에게 친구 요청을 할 수 없습니다.");
+        }
 
         // 받은 친구 요청
         Friendship receivedFriendship = Friendship.builder()
@@ -51,8 +55,8 @@ public class FriendshipService {
                 .myEmail(responseUser.getEmail())
                 .friendEmail(requestUser.getEmail())
                 .friendId(requestUser.getId())
-                .status(FriendshipStatus.PENDING)
-                .isReceived(true) // 요청을 받았음
+                .friendshipStatus(FriendshipStatus.PENDING)
+                .requestStatus(FriendshipRequestStatus.RECEIVED) // 요청을 받았음
                 .build();
 
         // 보낸 친구 요청
@@ -61,8 +65,8 @@ public class FriendshipService {
                 .myEmail(requestUser.getEmail())
                 .friendEmail(responseUser.getEmail())
                 .friendId(responseUser.getId())
-                .status(FriendshipStatus.PENDING)
-                .isReceived(false) // 요청을 보냈음
+                .friendshipStatus(FriendshipStatus.PENDING)
+                .requestStatus(FriendshipRequestStatus.SENT) // 요청을 보냈음
                 .build();
 
         //각각의 유저에 친구 요청 저장
@@ -71,6 +75,8 @@ public class FriendshipService {
 
         friendshipRepository.save(sendFriendship);
         friendshipRepository.save(receivedFriendship);
+
+        log.info("{} 이메일 계정으로 {} 이메일 계정에 친구 요청을 완료하였습니다.", requestUser.getEmail(), responseUser.getEmail());
 
 
     }

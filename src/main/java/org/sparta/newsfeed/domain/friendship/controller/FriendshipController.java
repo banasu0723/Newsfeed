@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sparta.newsfeed.config.JwtUtil;
 import org.sparta.newsfeed.domain.friendship.dto.FriendshipRequestDto;
 import org.sparta.newsfeed.domain.friendship.service.FriendshipService;
 import org.springframework.http.ResponseEntity;

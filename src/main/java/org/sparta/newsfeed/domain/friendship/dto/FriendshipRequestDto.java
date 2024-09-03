@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class FriendshipRequestDto {
 
     @NotBlank(message = "친구 요청할 이메일 입력은 필수 입력 값입니다.")
-    @Pattern(regexp = "^(?:\\w+\\.?)*\\w+@(?:\\w+\\.)+\\w+$", message = "이메일 형식이 올바르지 않습니다.")
+//    @Pattern(regexp = "^(?:\\w+\\.?)*\\w+@(?:\\w+\\.)+\\w+$", message = "이메일 형식이 올바르지 않습니다.")
     private String email;
 }
