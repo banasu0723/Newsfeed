@@ -1,5 +1,7 @@
 package org.sparta.newsfeed.domain.auth.service;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import jakarta.security.auth.message.AuthException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +12,8 @@ import org.sparta.newsfeed.domain.auth.dto.request.SignDeleteRequestDto;
 import org.sparta.newsfeed.domain.auth.dto.request.SigninRequestDto;
 import org.sparta.newsfeed.domain.auth.dto.request.SignupRequestDto;
 import org.sparta.newsfeed.domain.auth.dto.response.SignupResponseDto;
+import org.sparta.newsfeed.domain.profiles.exception.CustomException;
+import org.sparta.newsfeed.domain.profiles.exception.ExceptionMessage;
 import org.sparta.newsfeed.domain.users.entity.User;
 import org.sparta.newsfeed.domain.users.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -106,7 +110,7 @@ public class AuthService {
     }
 
     @Transactional
-    public Void singDelete(AuthUser authUser, SignDeleteRequestDto signDeleteRequestDto) {
+    public Void signDelete(AuthUser authUser, SignDeleteRequestDto signDeleteRequestDto) {
         User user = userRepository.findById(authUser.getId())
                 .orElseThrow(() -> new NullPointerException("잘못된 유저정보 입니다."));
 
@@ -134,6 +138,10 @@ public class AuthService {
             throw new IllegalArgumentException("잘못된 비밀번호 입니다.");
         }
 
+        if(!user.isActivate()){
+            throw new IllegalArgumentException("이미 탈퇴한 사용자 입니다.");
+        }
+
         String bearerToken = jwtUtil.createToken(
                 user.getId(),
                 user.getEmail()
@@ -144,4 +152,28 @@ public class AuthService {
 //
 //    public Void signOut() {
 //    }
+
+    public AuthUser validateToken(String token) {
+        try {
+            if (token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+
+            Claims claims = jwtUtil.extractClaims(token);
+
+            Long userId = Long.parseLong(claims.getSubject());
+            String email = claims.get("email", String.class);
+
+            return new AuthUser(userId, email);
+        } catch (IllegalArgumentException e) {
+            log.error("토큰 파싱 오류: ", e);
+            throw new CustomException(ExceptionMessage.INVALID_TOKEN, "토큰 파싱 오류");
+        } catch (JwtException e) {
+            log.error("JWT 오류: ", e);
+            throw new CustomException(ExceptionMessage.INVALID_TOKEN, "JWT 오류");
+        } catch (Exception e) {
+            log.error("토큰 검증 실패: ", e);
+            throw new CustomException(ExceptionMessage.INVALID_TOKEN, e.getMessage());
+        }
+    }
 }
