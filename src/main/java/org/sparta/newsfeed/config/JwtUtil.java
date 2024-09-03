@@ -33,13 +33,12 @@ public class JwtUtil {
     }
 
     // JWT 생성
-    public String createToken(Long userId, String username, String email){
+    public String createToken(Long userId, String email){
         Date date = new Date();
 
         return BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(String.valueOf(userId))
-                        .claim("username", username)
                         .claim("email", email)
                         .setExpiration(new Date(date.getTime() + TOKEN_TIME))
                         .signWith(key, signatureAlgorithm)

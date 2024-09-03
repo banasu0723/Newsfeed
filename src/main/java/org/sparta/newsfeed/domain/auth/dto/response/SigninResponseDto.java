@@ -1,4 +1,4 @@
 package org.sparta.newsfeed.domain.auth.dto.response;
 
-public class LoginResponseDto {
+public class SigninResponseDto {
 }

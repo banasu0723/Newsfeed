@@ -26,5 +26,11 @@ public class User extends Timestamped {
         this.email = email;
         this.password=password;
         this.name=userName;
+        this.activate = true;
+    }
+
+
+    public void unActivated() {
+        this.activate = !this.activate;
     }
 }

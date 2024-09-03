@@ -35,7 +35,8 @@ public class JwtFilter implements Filter {
         String url = httpRequest.getRequestURI();
         String method = httpRequest.getMethod();
 
-        if (url.startsWith("/auth")) {
+
+        if (url.startsWith("/auth/signup") || url.startsWith("/auth/signin")) {
             chain.doFilter(request, response);
             return;
         }
@@ -51,8 +52,15 @@ public class JwtFilter implements Filter {
 
         String jwt = jwtUtil.substringToken(bearerJwt);
 
-        try {
+        try { // 유효성 검사 및 claims추출 util 이거 createToken에서 name, email
             Claims claims = jwtUtil.extractClaims(jwt);
+
+            // 사용자 정보를 ArgumentResolver 로 넘기기 위해 HttpServletRequest 에 세팅
+            httpRequest.setAttribute("userId", Long.parseLong(claims.getSubject()));
+            httpRequest.setAttribute("email",claims.get("email", String.class));
+
+            chain.doFilter(request, response);
+
         } catch (SecurityException | MalformedJwtException e) {
             log.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.", e);
             httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "유효하지 않는 JWT 서명입니다.");
