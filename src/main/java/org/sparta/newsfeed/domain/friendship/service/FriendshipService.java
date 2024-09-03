@@ -91,6 +91,10 @@ public class FriendshipService {
         Friendship counterpartFriendship = friendshipRepository.findById(acceptFriendship.getFriendId())
                 .orElseThrow(() -> new NoSuchElementException("친구 요청 조회 실패"));
 
+        if (acceptFriendship.getFriendshipStatus() == FriendshipStatus.ACCEPTED) {
+            throw new IllegalArgumentException("이미 친구 관계인 계정입니다.");
+        }
+
         acceptFriendship.acceptFriendshipRequest();
         counterpartFriendship.acceptFriendshipRequest();
 
