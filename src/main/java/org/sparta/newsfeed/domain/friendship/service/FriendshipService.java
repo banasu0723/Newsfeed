@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -45,23 +46,25 @@ public class FriendshipService {
         User responseUser = userRepository.findByEmail(requestDto.getEmail())
                 .orElseThrow(() -> new NoSuchElementException("검색한 이메일 계정은 존재하지 않습니다."));
 
+        // 자기 자신에게 친구 요청시
         if (requestUser.getId() == responseUser.getId()) {
             throw new IllegalArgumentException("자기 자신에게 친구 요청을 할 수 없습니다.");
         }
 
         // 받은 친구 요청
         Friendship receivedFriendship = Friendship.builder()
-                .user(requestUser) // 나에게 친구 요청 보낸 유저
+                .user(responseUser)
                 .myEmail(responseUser.getEmail())
                 .friendEmail(requestUser.getEmail())
                 .friendId(requestUser.getId())
                 .friendshipStatus(FriendshipStatus.PENDING)
                 .requestStatus(FriendshipRequestStatus.RECEIVED) // 요청을 받았음
+
                 .build();
 
         // 보낸 친구 요청
         Friendship sendFriendship = Friendship.builder()
-                .user(responseUser)
+                .user(requestUser)
                 .myEmail(requestUser.getEmail())
                 .friendEmail(responseUser.getEmail())
                 .friendId(responseUser.getId())
@@ -76,18 +79,19 @@ public class FriendshipService {
         friendshipRepository.save(sendFriendship);
         friendshipRepository.save(receivedFriendship);
 
+
         log.info("{} 이메일 계정으로 {} 이메일 계정에 친구 요청을 완료하였습니다.", requestUser.getEmail(), responseUser.getEmail());
-
-
     }
 
     // 친구 요청 수락
     public void acceptFriendship(Long friendshipId) {
 
 
+        // 친구 요청 수락할 요청
         Friendship acceptFriendship = friendshipRepository.findById(friendshipId)
                 .orElseThrow(() -> new NoSuchElementException("해당 친구 요청은 존재하지 않습니다."));
 
+        // 반대편 상대 요청
         Friendship counterpartFriendship = friendshipRepository.findById(acceptFriendship.getFriendId())
                 .orElseThrow(() -> new NoSuchElementException("친구 요청 조회 실패"));
 
@@ -97,6 +101,27 @@ public class FriendshipService {
 
         acceptFriendship.acceptFriendshipRequest();
         counterpartFriendship.acceptFriendshipRequest();
+
+    }
+
+    // 친구 요청 거절
+    public void rejectFriendship(Long friendshipId) {
+
+        Friendship rejectFriendship = friendshipRepository.findById(friendshipId)
+                .orElseThrow(() -> new NoSuchElementException("해당 친구 요청은 존재하지 않습니다."));
+
+        Friendship counterpartFriendship = friendshipRepository.findById(rejectFriendship.getFriendId())
+                .orElseThrow(() -> new NoSuchElementException("친구 요청 조회 실패"));
+
+        User rejectingUser = userRepository.findById(rejectFriendship.getUser().getId()).get();
+        User rejectedUser = userRepository.findById(counterpartFriendship.getUser().getId()).get();
+
+        rejectingUser.getFriendshipUserList().remove(rejectFriendship);
+        rejectedUser.getFriendshipUserList().remove(counterpartFriendship);
+
+        friendshipRepository.delete(rejectFriendship);
+        friendshipRepository.delete(counterpartFriendship);
+
 
     }
 }

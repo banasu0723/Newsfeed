@@ -43,9 +43,8 @@ public class Friendship extends Timestamped {
     @Column(name = "friend_id", nullable = false)
     private Long friendId;
 
-
     @Builder
-    public Friendship(Long id, User user, User friend, FriendshipStatus friendshipStatus, String myEmail, String friendEmail, FriendshipRequestStatus requestStatus, Long friendId, LocalDateTime modifiedAt) {
+    public Friendship(Long id, User user, User friend, FriendshipStatus friendshipStatus, String myEmail, String friendEmail, FriendshipRequestStatus requestStatus, LocalDateTime modifiedAt, Long friendId) {
         this.id = id;
         this.user = user;
         this.friendshipStatus = friendshipStatus;
@@ -59,10 +58,6 @@ public class Friendship extends Timestamped {
     public void acceptFriendshipRequest() {
         friendshipStatus = FriendshipStatus.ACCEPTED;
     }
-
-
-
-
 }
 
 
