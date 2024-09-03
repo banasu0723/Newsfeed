@@ -26,25 +26,27 @@ public class AuthController {
 
 
     @PostMapping("/auth/signup")
-    public ResponseEntity<Void> signUp(@RequestBody SignupRequestDto signupRequestDto) {
+    public ResponseEntity<String> signUp(@RequestBody SignupRequestDto signupRequestDto) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .header(HttpHeaders.AUTHORIZATION,authService.signUp(signupRequestDto))
-                .build();
-
+                .body("회원 가입 완료");
     }
 
     @PostMapping("/auth/signdelete")
-    public ResponseEntity<Void> singDelete(@Auth AuthUser authUser, @RequestBody SignDeleteRequestDto signDeleteRequestDto){
-        return ResponseEntity.ok(authService.signDelete(authUser,signDeleteRequestDto));
+    public ResponseEntity<String> singDelete(@Auth AuthUser authUser, @RequestBody SignDeleteRequestDto signDeleteRequestDto){
+        authService.signDelete(authUser, signDeleteRequestDto);
+
+        return ResponseEntity.ok("회원 탈퇴 완료");
     }
 
     @PostMapping("/auth/signin")
-    public ResponseEntity<Void> signIn(@RequestBody SigninRequestDto signinRequestDto){
-        return ResponseEntity.status(HttpStatus.OK)
+    public ResponseEntity<String> signIn(@RequestBody SigninRequestDto signinRequestDto){
+        return ResponseEntity
+                .status(HttpStatus.OK)
                 .header(HttpHeaders.AUTHORIZATION,authService.signIn(signinRequestDto))
-                .build();
+                .body("로그인 완료");
     }
 //
 //    @PostMapping("/auth/signout")
