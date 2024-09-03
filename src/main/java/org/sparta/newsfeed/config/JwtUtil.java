@@ -41,6 +41,7 @@ public class JwtUtil {
                         .setSubject(String.valueOf(userId))
                         .claim("email", email)
                         .setExpiration(new Date(date.getTime() + TOKEN_TIME))
+                        .setIssuedAt(date) // 발급일
                         .signWith(key, signatureAlgorithm)
                         .compact();
     }

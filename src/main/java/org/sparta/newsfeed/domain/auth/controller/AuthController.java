@@ -2,6 +2,8 @@ package org.sparta.newsfeed.domain.auth.controller;
 
 import org.sparta.newsfeed.annotation.Auth;
 import org.sparta.newsfeed.domain.auth.dto.AuthUser;
+import org.sparta.newsfeed.domain.auth.dto.request.SignDeleteRequestDto;
+import org.sparta.newsfeed.domain.auth.dto.request.SigninRequestDto;
 import org.sparta.newsfeed.domain.auth.dto.request.SignupRequestDto;
 import org.sparta.newsfeed.domain.auth.service.AuthService;
 import org.springframework.http.HttpHeaders;
@@ -34,16 +36,16 @@ public class AuthController {
     }
 
     @PostMapping("/auth/signdelete")
-    public ResponseEntity<Void> singDelete(@Auth AuthUser authUser){
-        return ResponseEntity.ok(authService.singDelete(authUser));
+    public ResponseEntity<Void> singDelete(@Auth AuthUser authUser, @RequestBody SignDeleteRequestDto signDeleteRequestDto){
+        return ResponseEntity.ok(authService.singDelete(authUser,signDeleteRequestDto));
     }
 
-//    @PostMapping("/auth/signin")
-//    public ResponseEntity<Void> signIn(@RequestBody SigninRequestDto signinRequestDto){
-//        return ResponseEntity.status(HttpStatus.OK)
-//                .header(HttpHeaders.AUTHORIZATION,authService.signIn(signinRequestDto))
-//                .build();
-//    }
+    @PostMapping("/auth/signin")
+    public ResponseEntity<Void> signIn(@RequestBody SigninRequestDto signinRequestDto){
+        return ResponseEntity.status(HttpStatus.OK)
+                .header(HttpHeaders.AUTHORIZATION,authService.signIn(signinRequestDto))
+                .build();
+    }
 //
 //    @PostMapping("/auth/signout")
 //    public ResponseEntity<Void> singOut(){

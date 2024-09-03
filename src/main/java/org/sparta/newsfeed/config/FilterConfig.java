@@ -11,6 +11,7 @@ public class FilterConfig {
 
     private final JwtUtil jwtUtil;
 
+    //필터 등록
     @Bean
     public FilterRegistrationBean<JwtFilter> jwtFilter() {
         FilterRegistrationBean<JwtFilter> registrationBean = new FilterRegistrationBean<>();

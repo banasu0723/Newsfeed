@@ -10,9 +10,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import jakarta.servlet.Filter;
 
 import java.io.IOException;
-import java.util.List;
+
 
 
 @Slf4j
@@ -33,9 +34,8 @@ public class JwtFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
         String url = httpRequest.getRequestURI();
-        String method = httpRequest.getMethod();
 
-
+        //가입, 로그인은 jwt 체크 불필요
         if (url.startsWith("/auth/signup") || url.startsWith("/auth/signin")) {
             chain.doFilter(request, response);
             return;
@@ -56,10 +56,13 @@ public class JwtFilter implements Filter {
             Claims claims = jwtUtil.extractClaims(jwt);
 
             // 사용자 정보를 ArgumentResolver 로 넘기기 위해 HttpServletRequest 에 세팅
+
+
             httpRequest.setAttribute("userId", Long.parseLong(claims.getSubject()));
-            httpRequest.setAttribute("email",claims.get("email", String.class));
+            httpRequest.setAttribute("email", claims.get("email", String.class));
 
             chain.doFilter(request, response);
+
 
         } catch (SecurityException | MalformedJwtException e) {
             log.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.", e);
@@ -84,36 +87,5 @@ public class JwtFilter implements Filter {
         Filter.super.destroy();
     }
 
-    // HTTP메소드랑 URL 경로가 아래 조건들을 만족하는지 확인
-    private boolean checkMethodPath(String method, String url, List<String> allowedMethods, String pathPrefix) {
-        // 요청된 HTTP가 허용된 메소드에 포함 되는지 확인
-        if(!checkHttpMethod(method, allowedMethods)){
-            return false;
-        }
-
-        // URL이 pathPrefix로 시작하는지?
-        if(!checkPathUrl(url,pathPrefix)){
-            return false;
-        }
-
-        String idPart = extractIdFromPath(url, pathPrefix);
-        return isNumeric(idPart);
-    }
-
-    private boolean checkHttpMethod(String method, List<String> allowedMethods) {
-        return allowedMethods.stream().anyMatch(allowedMethod -> allowedMethod.equalsIgnoreCase(method));
-    }
-
-    private boolean checkPathUrl(String url, String pathPrefix) {
-        return url.startsWith(pathPrefix);
-    }
-
-    private String extractIdFromPath(String url, String pathPrefix) {
-        return url.substring(pathPrefix.length());
-    }
-
-    private boolean isNumeric(String str) {
-        return str != null && str.matches("\\d+");
-    }
 
 }
