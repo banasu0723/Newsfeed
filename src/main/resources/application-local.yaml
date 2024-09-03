@@ -21,8 +21,6 @@ spring:
     level:
       org.hibernate.SQL: debug
       org.hibernate.type: trace
-      org.sparta.newsfeed: DEBUG
-      org.springframework.web: DEBUG
 
   jwt:
     secret:

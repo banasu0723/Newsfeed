@@ -1,10 +1,10 @@
-package org.sparta.newsfeed.posts.service;
+package org.sparta.newsfeed.domain.posts.service;
 
 import lombok.RequiredArgsConstructor;
-import org.sparta.newsfeed.posts.dto.PostRequestDto;
-import org.sparta.newsfeed.posts.dto.PostResponseDto;
-import org.sparta.newsfeed.posts.entity.Post;
-import org.sparta.newsfeed.posts.repository.PostRepository;
+import org.sparta.newsfeed.domain.posts.dto.PostRequestDto;
+import org.sparta.newsfeed.domain.posts.dto.PostResponseDto;
+import Post;
+import org.sparta.newsfeed.domain.posts.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

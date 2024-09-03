@@ -1,9 +1,9 @@
-package org.sparta.newsfeed.posts.controller;
+package org.sparta.newsfeed.domain.posts.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.sparta.newsfeed.posts.dto.PostRequestDto;
-import org.sparta.newsfeed.posts.dto.PostResponseDto;
-import org.sparta.newsfeed.posts.service.PostService;
+import org.sparta.newsfeed.domain.posts.dto.PostRequestDto;
+import org.sparta.newsfeed.domain.posts.dto.PostResponseDto;
+import org.sparta.newsfeed.domain.posts.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
