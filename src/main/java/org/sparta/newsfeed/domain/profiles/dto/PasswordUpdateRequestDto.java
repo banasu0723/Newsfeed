@@ -1,4 +1,4 @@
-package org.sparta.newsfeed.domain.posts.profiles.dto;
+package org.sparta.newsfeed.domain.profiles.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
