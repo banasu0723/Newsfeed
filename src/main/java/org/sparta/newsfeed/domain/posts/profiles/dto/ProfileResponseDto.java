@@ -1,4 +1,4 @@
-package org.sparta.newsfeed.domain.profiles.dto;
+package org.sparta.newsfeed.domain.posts.profiles.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

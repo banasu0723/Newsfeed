@@ -1,11 +1,11 @@
-package org.sparta.newsfeed.domain.profiles.service;
+package org.sparta.newsfeed.domain.posts.profiles.service;
 
 import org.sparta.newsfeed.config.PasswordEncoder;
-import org.sparta.newsfeed.domain.profiles.dto.PasswordUpdateRequestDto;
-import org.sparta.newsfeed.domain.profiles.dto.ProfileResponseDto;
-import org.sparta.newsfeed.domain.profiles.dto.ProfileUpdateRequestDto;
-import org.sparta.newsfeed.domain.profiles.exception.CustomException;
-import org.sparta.newsfeed.domain.profiles.exception.ExceptionMessage;
+import org.sparta.newsfeed.domain.posts.profiles.dto.PasswordUpdateRequestDto;
+import org.sparta.newsfeed.domain.posts.profiles.dto.ProfileResponseDto;
+import org.sparta.newsfeed.domain.posts.profiles.dto.ProfileUpdateRequestDto;
+import org.sparta.newsfeed.domain.posts.profiles.exception.CustomException;
+import org.sparta.newsfeed.domain.posts.profiles.exception.ExceptionMessage;
 import org.sparta.newsfeed.domain.users.entity.User;
 import org.sparta.newsfeed.domain.users.repository.UserRepository;
 import jakarta.transaction.Transactional;

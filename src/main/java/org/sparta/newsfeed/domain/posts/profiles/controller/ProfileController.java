@@ -1,10 +1,10 @@
-package org.sparta.newsfeed.domain.profiles.controller;
+package org.sparta.newsfeed.domain.posts.profiles.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.sparta.newsfeed.domain.profiles.dto.PasswordUpdateRequestDto;
-import org.sparta.newsfeed.domain.profiles.dto.ProfileResponseDto;
-import org.sparta.newsfeed.domain.profiles.dto.ProfileUpdateRequestDto;
-import org.sparta.newsfeed.domain.profiles.service.ProfileService;
+import org.sparta.newsfeed.domain.posts.profiles.dto.PasswordUpdateRequestDto;
+import org.sparta.newsfeed.domain.posts.profiles.dto.ProfileResponseDto;
+import org.sparta.newsfeed.domain.posts.profiles.dto.ProfileUpdateRequestDto;
+import org.sparta.newsfeed.domain.posts.profiles.service.ProfileService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
