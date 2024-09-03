@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -64,4 +65,28 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody();
     }
+
+
+    // JWT에서 직접 이메일 추출
+//    public String getEmailFromRequest(HttpServletRequest request) {
+//        // Authorization 헤더에서 JWT 토큰 추출
+//        String token = resolveToken(request);
+//        if (token != null) {
+//            // 토큰에서 클레임을 추출하여 이메일을 반환
+//            Claims claims = extractClaims(token);
+//            return claims.get("email", String.class);
+//        }
+//        log.error("Invalid or missing JWT token");
+//        return null;
+//    }
+//
+//    // Authorization 헤더에서 JWT 토큰을 추출
+//    private String resolveToken(HttpServletRequest request) {
+//        String bearerToken = request.getHeader("Authorization");
+//        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+//            return bearerToken.substring(BEARER_PREFIX.length());
+//        }
+//        return null;
+//    }
+
 }

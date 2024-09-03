@@ -1,4 +1,4 @@
-package org.sparta.newsfeed.friendship;
+package org.sparta.newsfeed.domain.friendship.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
