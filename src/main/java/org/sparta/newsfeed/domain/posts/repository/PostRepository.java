@@ -8,7 +8,5 @@ import java.util.Collection;
 import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
-    List<Post> findByUserIn(List<User> users);
 
-    Collection<Object> findByUser(User user);
 }

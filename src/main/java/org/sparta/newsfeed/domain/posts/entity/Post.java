@@ -17,10 +17,6 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private User user;
-
     @Column(nullable = false)
     private String title;
 
@@ -32,8 +28,7 @@ public class Post {
     private Timestamp updatedAt;
 
     @Builder
-    public Post(User user, String title, String content, Timestamp createdAt, Timestamp updatedAt) {
-        this.user = user;
+    public Post(String title, String content, Timestamp createdAt, Timestamp updatedAt) {
         this.title = title;
         this.content = content;
         this.createdAt = createdAt;
