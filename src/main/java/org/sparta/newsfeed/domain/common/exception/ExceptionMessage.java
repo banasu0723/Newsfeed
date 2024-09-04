@@ -1,4 +1,4 @@
-package org.sparta.newsfeed.domain.profiles.exception;
+package org.sparta.newsfeed.domain.common.exception;
 
 public enum ExceptionMessage {
 
