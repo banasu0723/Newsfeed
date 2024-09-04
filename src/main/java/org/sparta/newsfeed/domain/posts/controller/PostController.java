@@ -48,12 +48,25 @@ public class PostController {
 
     }
 
+
     // 개인 모든 게시글 조회
     @GetMapping
     public ResponseEntity<List<PostResponseDto>> getMyPosts(HttpServletRequest httpRequest, @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         Long userId = (Long) httpRequest.getAttribute("userId");
         List<PostResponseDto> res = postService.getMyPosts(userId, pageable);
         return ResponseEntity.ok(res);
+    }
+
+    // 게시물 수정
+    @PutMapping("/{postId}")
+    public PostResponseDto updatePost(@PathVariable Long postId, @RequestBody PostRequestDto postRequestDto) {
+        return postService.updatePost(postId, postRequestDto);
+    }
+
+    // 게시물 삭제
+    @DeleteMapping("/{postId}")
+    public void deletePost(@PathVariable Long postId) {
+        postService.deletePost(postId);
     }
 
 }

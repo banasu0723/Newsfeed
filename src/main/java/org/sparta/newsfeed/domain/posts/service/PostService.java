@@ -93,6 +93,10 @@ public class PostService {
     }
 
     //게시물 삭제
+    public void deletePost(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));  // 게시물 조회
+        postRepository.delete(post);  // 게시물 삭제
+    }
 
 
 }
