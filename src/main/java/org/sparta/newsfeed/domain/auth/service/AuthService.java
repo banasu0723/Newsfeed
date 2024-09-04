@@ -41,11 +41,22 @@ public class AuthService {
             throw new IllegalArgumentException("중복된 이메일 입니다.");
         }
 
+        String email = signupRequestDto.getEmail();
+
+        //이메일 정규 표현식
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+
+
+        if (!email.matches(emailRegex)) {
+            log.error("이메일 형식 오류");
+            throw new IllegalArgumentException("이메일 형식 오류");
+        }
+
         // 비밀번호 조건
         // 대소문자 포함 영문 + 숫자 + 특수문자를 최소 1글자씩
         String password = signupRequestDto.getPassword();
         //// 8글자 이상
-        if(password.length()<8){
+        if (password.length() < 8) {
             log.error("비밀번호 8글자 미만");
             throw new IllegalArgumentException("비밀번호 8글자 미만");
         }
@@ -112,7 +123,7 @@ public class AuthService {
                 .orElseThrow(() -> new NullPointerException("잘못된 유저정보 입니다."));
 
         // 입력한 비밀번호 확인
-        if(!passwordEncoder.matches(signDeleteRequestDto.getPassword(), user.getPassword())){
+        if (!passwordEncoder.matches(signDeleteRequestDto.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("잘못된 비밀번호 입니다.");
         }
 
@@ -129,13 +140,13 @@ public class AuthService {
     }
 
     public String signIn(SigninRequestDto signinRequestDto) {
-        User user = userRepository.findByEmail(signinRequestDto.getEmail()).orElseThrow(()->new NullPointerException("잘못된 유저정보 입니다."));
+        User user = userRepository.findByEmail(signinRequestDto.getEmail()).orElseThrow(() -> new NullPointerException("잘못된 유저정보 입니다."));
 
         if (!passwordEncoder.matches(signinRequestDto.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("잘못된 비밀번호 입니다.");
         }
 
-        if(!user.isActivate()){
+        if (!user.isActivate()) {
             throw new IllegalArgumentException("이미 탈퇴한 사용자 입니다.");
         }
 

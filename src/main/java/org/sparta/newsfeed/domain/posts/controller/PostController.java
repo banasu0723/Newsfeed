@@ -33,10 +33,12 @@ public class PostController {
         return postService.createPost(postRequestDto, userId);
     }
 
+
     // 친구 뉴스피드 조회
     @GetMapping
     public ResponseEntity<List<PostResponseDto>> getFriendNewsfeeds(HttpServletRequest httpRequest, @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         log.info("친구 뉴스피드 목록 조회 - 페이지 인덱스: {}, 페이지: {}, 사이즈: {}", pageable.getPageNumber(), pageable.getPageNumber() + 1, pageable.getPageSize());
+
 
         Long userId = (Long) httpRequest.getAttribute("userId");
         List<PostResponseDto> res = postService.getFriendNewsfeeds(userId, pageable);

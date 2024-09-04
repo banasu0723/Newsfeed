@@ -72,7 +72,16 @@ public class PostService {
 
 
 
+
     //게시물 수정
+    public PostResponseDto updatePost(Long postId, PostRequestDto postRequestDto) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("게시물이 없습니다."));  // 게시물 조회
+
+        post.update(postRequestDto.getTitle(), postRequestDto.getContent());  // 게시물 수정
+        postRepository.save(post);  // 수정된 게시물 저장
+        PostResponseDto.PostData postData = new PostResponseDto.PostData(post.getTitle(), post.getContent(), post.getCreatedAt(), post.getUpdatedAt());  // 응답 데이터 설정
+        return new PostResponseDto(200, "게시물 수정 완료.", postData);  // 응답 DTO 반환
+    }
 
     //게시물 삭제
 
