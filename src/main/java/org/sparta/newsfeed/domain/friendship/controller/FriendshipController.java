@@ -50,12 +50,14 @@ public class FriendshipController {
         return ResponseEntity.ok("친구 요청 수락 완료");
     }
 
-    // 친구 요청 거절
+    // 친구 요청 거절 및 친구 삭제
     @DeleteMapping("/{friendshipId}")
     public ResponseEntity<String> rejectFriendship(@PathVariable Long friendshipId) {
 
-        friendshipService.rejectFriendship(friendshipId);
-        return ResponseEntity.ok("친구 요청 삭제 완료");
-
+        String res = friendshipService.rejectFriendship(friendshipId);
+        return ResponseEntity.ok(res);
     }
+
+
+
 }

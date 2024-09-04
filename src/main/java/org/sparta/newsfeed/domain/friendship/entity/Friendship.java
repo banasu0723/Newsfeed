@@ -23,11 +23,9 @@ public class Friendship extends Timestamped {
     @Column(name = "friendship_id")
     private Long id;
 
-    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
 
     @Enumerated(EnumType.STRING)
     @Column(name = "friendship_status", nullable = false)
@@ -40,7 +38,7 @@ public class Friendship extends Timestamped {
     @Column(name = "request_status", nullable = false)
     private FriendshipRequestStatus requestStatus; // 요청을 받았는지 보냈는지 구분
 
-    @Column(name = "friend_id", nullable = false)
+    @Column(name = "friend_id")
     private Long friendId;
 
     @Builder
@@ -57,6 +55,14 @@ public class Friendship extends Timestamped {
 
     public void acceptFriendshipRequest() {
         friendshipStatus = FriendshipStatus.ACCEPTED;
+    }
+
+    public void initFriendshipStatus() {
+        this.friendshipStatus = FriendshipStatus.PENDING;
+    }
+
+    public void setFriendId(Long id) {
+        friendId = id;
     }
 }
 
