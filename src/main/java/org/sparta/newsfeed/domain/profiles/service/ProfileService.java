@@ -30,8 +30,7 @@ public class ProfileService {
                 user.getName(),
                 user.getEmail(),
                 user.getIntroduction(),
-                user.getImage(),
-                null  //게시물 추가 예정
+                user.getImage()  // 게시물 리스트 제거
         );
     }
 
@@ -49,8 +48,7 @@ public class ProfileService {
                 user.getName(),
                 user.getEmail(),
                 user.getIntroduction(),
-                user.getImage(),
-                null  // 추후 게시물 추가 예정
+                user.getImage()
         );
     }
 
@@ -77,4 +75,3 @@ public class ProfileService {
 }
 
 
-//test

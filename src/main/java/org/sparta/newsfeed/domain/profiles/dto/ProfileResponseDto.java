@@ -12,5 +12,4 @@ public class ProfileResponseDto {
     private final String email;
     private final String introduction;
     private final String profileImage;
-    private final List<PostResponseDto> posts;
 }
