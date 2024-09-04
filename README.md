@@ -70,18 +70,17 @@ Communication
 | 프로필 수정   | `PUT`    | `/profiles/{id}`               | Body    | 수정 정보         | `200 : 정상수정` |
 | 비밀번호 변경  | `POST`   | `/profiles/{id}/change-pwd`    | Body    | 변경 메시지        | `200 : 정상수정` |
 | 게시물 작성   | `POST`   | `/posts`                       | Body    | 등록 정보         | `201 : 정상작성` |
-| 게시물 조회   | `GET`    | `/post/{id}`                   | Param   | 게시물 내용        | `200 : 정상조회` |
+| 게시물 조회   | `GET`    | `/posts`                   |    | 게시물 내용        | `200 : 정상조회` |
 | 게시물 수정   | `PUT`    | `/posts/{id}`                  | Body    | 수정 정보         | `200 : 정상수정` |
 | 게시물 삭제   | `DELETE` | `/posts/{id}`                  | Param   | 삭제 메시지        | `200 : 정상삭제` |
-| 뉴스피드 조회  | `GET`    | `/posts`                       | Body    | 페이지네이션 된 뉴스피드 | `200 : 정상조회` |
+| 뉴스피드 조회  | `GET`    | `/posts/newsfeeds`                       | Body    | 페이지네이션 된 뉴스피드 | `200 : 정상조회` |
 | 회원 가입    | `POST`   | `/auth/signup`                 | Body    | 가입 메시지        | `201 : 정상가입` |
 | 회원 탈퇴    | `POST`   | `/auth/signdelete`             | Body    | 탈퇴 메시지        | `200 : 정상탈퇴` |
 | 로그인      | `POST`   | `/auth/signin`                 | Body    | JWT           | `200 : 정상처리` |
 | 로그아웃     | `POST`   | `/auth/signout`                | -       | -             | `200 : 정상처리` |
 | 친구 요청    | `POST`   | `/friendships`                 | Body    | 요청 메시지        | `200 : 정상요청` |
-| 친구 수락    | `PATCH`  | `/friendships`                 | -       | 수락 메시지        | `200 : 정상요청` |
-| 친구 삭제    | `DELETE` | `/friendships/{friendshipsid}` | -       | 삭제 메시지        | `200 : 정상삭제` |
-| 친구 거절    | `DELETE` | `/friendships/reject`          | -       | -             | `200 : 정상요청` |
+| 친구 수락    | `PUT`  | `/friendships/{friendshipsid}`                 | -       | 수락 메시지        | `200 : 정상요청` |
+| 친구 삭제 및 거절    | `DELETE` | `/friendships/{friendshipsid}` | -       | 삭제 메시지        | `200 : 정상삭제` |
 | 친구 리스트   | `GET`    | `/friendships`                 | -       | 친구 리스트        | `200 : 정상조회` |
 | 친구 요청 조회 |          |                                | -       | -             | `200 : 정상조회` |
 
