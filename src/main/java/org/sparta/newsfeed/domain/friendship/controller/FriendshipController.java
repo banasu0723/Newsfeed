@@ -2,13 +2,20 @@ package org.sparta.newsfeed.domain.friendship.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sparta.newsfeed.domain.friendship.dto.FriendshipRequestDto;
+import org.sparta.newsfeed.domain.friendship.dto.FriendshipResponseDto;
 import org.sparta.newsfeed.domain.friendship.service.FriendshipService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -58,6 +65,12 @@ public class FriendshipController {
         return ResponseEntity.ok(res);
     }
 
-
+    // 친구 리스트 조회
+    @GetMapping
+    public ResponseEntity<List<FriendshipResponseDto>> getFriendsList(HttpServletRequest httpRequest, @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC)Pageable pageable) {
+        Long userId = (Long) httpRequest.getAttribute("userId");
+        List<FriendshipResponseDto> res = friendshipService.getFriendsList(userId, pageable);
+        return ResponseEntity.ok(res);
+    }
 
 }
