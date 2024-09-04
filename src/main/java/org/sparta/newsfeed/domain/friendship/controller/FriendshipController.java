@@ -73,4 +73,14 @@ public class FriendshipController {
         return ResponseEntity.ok(res);
     }
 
+    // 친구 요청 리스트 조회
+    @GetMapping("/request")
+    public ResponseEntity<List<FriendshipResponseDto>> getFriendRequestList(HttpServletRequest httpRequest, @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC)Pageable pageable) {
+        Long userId = (Long) httpRequest.getAttribute("userId");
+        List<FriendshipResponseDto> res = friendshipService.getFriendRequestList(userId, pageable);
+        return ResponseEntity.ok(res);
+    }
+
+
+
 }
