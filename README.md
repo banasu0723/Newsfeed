@@ -21,12 +21,12 @@
 
 # 🧐 팀구성원
 
-| 이 름 | MBTI | 직책 | 깃허브 주소 |
-|-----|:----:|:--:|:-------:|
-| 이승언 | ENFP | 팀장 ||
-| 김도균 | INTP | 팀원 ||
-| 김창민 | INFJ | 팀원 |[]()|
-| 나유화 | ENFJ | 팀원 ||
+| 이 름 | MBTI | 직책 |                  깃허브 주소                   |
+|-----|:----:|:--:|:-----------------------------------------:|
+| 이승언 | ENFP | 팀장 |   [이승언](https://github.com/banasu0723)    |
+| 김도균 | INTP | 팀원 |     [김도균](https://github.com/gyun97)      |
+| 김창민 | INFJ | 팀원 | [김창민](https://github.com/Rlackdals981010) |
+| 나유화 | ENFJ | 팀원 |     [나유화](https://github.com/fargoe)      |
 
 # 🚀STACK
 
@@ -60,7 +60,221 @@ Communication
 
 # 🏗️ 프로젝트 디렉토리 구조
 
-구현 다 하고 추가
+```├── README.md
+├── build
+│   ├── classes
+│   │   └── java
+│   │       └── main
+│   │           └── org
+│   │               └── sparta
+│   │                   └── newsfeed
+│   │                       ├── NewsfeedApplication.class
+│   │                       ├── annotation
+│   │                       │   └── Auth.class
+│   │                       ├── config
+│   │                       │   ├── AuthUserArgumentResolver.class
+│   │                       │   ├── FilterConfig.class
+│   │                       │   ├── JwtFilter.class
+│   │                       │   ├── JwtUtil.class
+│   │                       │   ├── PasswordEncoder.class
+│   │                       │   └── WebConfig.class
+│   │                       └── domain
+│   │                           ├── auth
+│   │                           │   ├── controller
+│   │                           │   │   └── AuthController.class
+│   │                           │   ├── dto
+│   │                           │   │   ├── AuthUser.class
+│   │                           │   │   ├── request
+│   │                           │   │   │   ├── SignDeleteRequestDto.class
+│   │                           │   │   │   ├── SigninRequestDto.class
+│   │                           │   │   │   └── SignupRequestDto.class
+│   │                           │   │   └── response
+│   │                           │   │       ├── SigninResponseDto.class
+│   │                           │   │       └── SignupResponseDto.class
+│   │                           │   └── service
+│   │                           │       └── AuthService.class
+│   │                           ├── common
+│   │                           │   ├── Timestamped.class
+│   │                           │   └── exception
+│   │                           │       ├── CustomException.class
+│   │                           │       ├── ExceptionMessage.class
+│   │                           │       └── GlobalExceptionHandler.class
+│   │                           ├── friendship
+│   │                           │   ├── FriendshipRequestStatus.class
+│   │                           │   ├── FriendshipStatus.class
+│   │                           │   ├── controller
+│   │                           │   │   └── FriendshipController.class
+│   │                           │   ├── dto
+│   │                           │   │   └── FriendshipRequestDto.class
+│   │                           │   ├── entity
+│   │                           │   │   ├── Friendship$FriendshipBuilder.class
+│   │                           │   │   └── Friendship.class
+│   │                           │   ├── repository
+│   │                           │   │   └── FriendshipRepository.class
+│   │                           │   └── service
+│   │                           │       └── FriendshipService.class
+│   │                           ├── posts
+│   │                           │   ├── controller
+│   │                           │   │   └── PostController.class
+│   │                           │   ├── dto
+│   │                           │   │   ├── PostRequestDto.class
+│   │                           │   │   ├── PostResponseDto$PostData.class
+│   │                           │   │   └── PostResponseDto.class
+│   │                           │   ├── entity
+│   │                           │   │   ├── Post$PostBuilder.class
+│   │                           │   │   └── Post.class
+│   │                           │   ├── repository
+│   │                           │   │   └── PostRepository.class
+│   │                           │   └── service
+│   │                           │       └── PostService.class
+│   │                           ├── profiles
+│   │                           │   ├── controller
+│   │                           │   │   └── ProfileController.class
+│   │                           │   ├── dto
+│   │                           │   │   ├── PasswordUpdateRequestDto.class
+│   │                           │   │   ├── PostResponseDto.class
+│   │                           │   │   ├── ProfileResponseDto.class
+│   │                           │   │   └── ProfileUpdateRequestDto.class
+│   │                           │   └── service
+│   │                           │       └── ProfileService.class
+│   │                           └── users
+│   │                               ├── entity
+│   │                               │   └── User.class
+│   │                               └── repository
+│   │                                   └── UserRepository.class
+│   ├── generated
+│   │   └── sources
+│   │       ├── annotationProcessor
+│   │       │   └── java
+│   │       │       └── main
+│   │       └── headers
+│   │           └── java
+│   │               └── main
+│   ├── resources
+│   │   └── main
+│   │       ├── application-local.yaml
+│   │       └── application.yaml
+│   └── tmp
+│       └── compileJava
+│           ├── compileTransaction
+│           │   ├── backup-dir
+│           │   └── stash-dir
+│           │       ├── AuthController.class.uniqueId8
+│           │       ├── AuthService.class.uniqueId11
+│           │       ├── CustomException.class.uniqueId16
+│           │       ├── ExceptionMessage.class.uniqueId19
+│           │       ├── FilterConfig.class.uniqueId4
+│           │       ├── GlobalExceptionHandler.class.uniqueId12
+│           │       ├── JwtFilter.class.uniqueId18
+│           │       ├── JwtUtil.class.uniqueId0
+│           │       ├── NewsfeedApplication.class.uniqueId17
+│           │       ├── Post$PostBuilder.class.uniqueId15
+│           │       ├── Post.class.uniqueId14
+│           │       ├── PostController.class.uniqueId3
+│           │       ├── PostRepository.class.uniqueId13
+│           │       ├── PostService.class.uniqueId7
+│           │       ├── ProfileController.class.uniqueId10
+│           │       ├── ProfileService.class.uniqueId9
+│           │       ├── Timestamped.class.uniqueId1
+│           │       ├── User.class.uniqueId6
+│           │       ├── UserRepository.class.uniqueId5
+│           │       └── entity.class.uniqueId2
+│           └── previous-compilation-data.bin
+├── build.gradle
+├── gradle
+│   └── wrapper
+│       ├── gradle-wrapper.jar
+│       └── gradle-wrapper.properties
+├── gradlew
+├── gradlew.bat
+├── settings.gradle
+└── src
+    ├── main
+    │   ├── java
+    │   │   └── org
+    │   │       └── sparta
+    │   │           └── newsfeed
+    │   │               ├── NewsfeedApplication.java
+    │   │               ├── annotation
+    │   │               │   └── Auth.java
+    │   │               ├── config
+    │   │               │   ├── AuthUserArgumentResolver.java
+    │   │               │   ├── FilterConfig.java
+    │   │               │   ├── JwtFilter.java
+    │   │               │   ├── JwtUtil.java
+    │   │               │   ├── PasswordEncoder.java
+    │   │               │   └── WebConfig.java
+    │   │               └── domain
+    │   │                   ├── auth
+    │   │                   │   ├── controller
+    │   │                   │   │   └── AuthController.java
+    │   │                   │   ├── dto
+    │   │                   │   │   ├── AuthUser.java
+    │   │                   │   │   ├── request
+    │   │                   │   │   │   ├── SignDeleteRequestDto.java
+    │   │                   │   │   │   ├── SigninRequestDto.java
+    │   │                   │   │   │   └── SignupRequestDto.java
+    │   │                   │   │   └── response
+    │   │                   │   │       ├── SigninResponseDto.java
+    │   │                   │   │       └── SignupResponseDto.java
+    │   │                   │   └── service
+    │   │                   │       └── AuthService.java
+    │   │                   ├── common
+    │   │                   │   ├── Timestamped.java
+    │   │                   │   └── exception
+    │   │                   │       ├── CustomException.java
+    │   │                   │       ├── ExceptionMessage.java
+    │   │                   │       └── GlobalExceptionHandler.java
+    │   │                   ├── friendship
+    │   │                   │   ├── FriendshipRequestStatus.java
+    │   │                   │   ├── FriendshipStatus.java
+    │   │                   │   ├── controller
+    │   │                   │   │   └── FriendshipController.java
+    │   │                   │   ├── dto
+    │   │                   │   │   └── FriendshipRequestDto.java
+    │   │                   │   ├── entity
+    │   │                   │   │   └── Friendship.java
+    │   │                   │   ├── repository
+    │   │                   │   │   └── FriendshipRepository.java
+    │   │                   │   └── service
+    │   │                   │       └── FriendshipService.java
+    │   │                   ├── posts
+    │   │                   │   ├── controller
+    │   │                   │   │   └── PostController.java
+    │   │                   │   ├── dto
+    │   │                   │   │   ├── PostRequestDto.java
+    │   │                   │   │   └── PostResponseDto.java
+    │   │                   │   ├── entity
+    │   │                   │   │   └── Post.java
+    │   │                   │   ├── repository
+    │   │                   │   │   └── PostRepository.java
+    │   │                   │   └── service
+    │   │                   │       └── PostService.java
+    │   │                   ├── profiles
+    │   │                   │   ├── controller
+    │   │                   │   │   └── ProfileController.java
+    │   │                   │   ├── dto
+    │   │                   │   │   ├── PasswordUpdateRequestDto.java
+    │   │                   │   │   ├── PostResponseDto.java
+    │   │                   │   │   ├── ProfileResponseDto.java
+    │   │                   │   │   └── ProfileUpdateRequestDto.java
+    │   │                   │   └── service
+    │   │                   │       └── ProfileService.java
+    │   │                   └── users
+    │   │                       ├── entity
+    │   │                       │   └── User.java
+    │   │                       └── repository
+    │   │                           └── UserRepository.java
+    │   └── resources
+    │       ├── application-local.yaml
+    │       └── application.yaml
+    └── test
+        └── java
+            └── org
+                └── sparta
+                    └── newsfeed
+                        └── NewsfeedApplicationTests.java
+```                        
 
 # API 명세
 
@@ -77,7 +291,6 @@ Communication
 | 회원 가입    | `POST`   | `/auth/signup`                 | Body    | 가입 메시지        | `201 : 정상가입` |
 | 회원 탈퇴    | `POST`   | `/auth/signdelete`             | Body    | 탈퇴 메시지        | `200 : 정상탈퇴` |
 | 로그인      | `POST`   | `/auth/signin`                 | Body    | JWT           | `200 : 정상처리` |
-| 로그아웃     | `POST`   | `/auth/signout`                | -       | -             | `200 : 정상처리` |
 | 친구 요청    | `POST`   | `/friendships`                 | Body    | 요청 메시지        | `200 : 정상요청` |
 | 친구 수락    | `PATCH`  | `/friendships`                 | -       | 수락 메시지        | `200 : 정상요청` |
 | 친구 삭제    | `DELETE` | `/friendships/{friendshipsid}` | -       | 삭제 메시지        | `200 : 정상삭제` |
