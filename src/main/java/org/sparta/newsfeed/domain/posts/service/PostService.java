@@ -1,12 +1,12 @@
 package org.sparta.newsfeed.domain.posts.service;
 
 import lombok.RequiredArgsConstructor;
+import org.sparta.newsfeed.domain.auth.service.AuthService;
 import org.sparta.newsfeed.domain.posts.dto.PostRequestDto;
 import org.sparta.newsfeed.domain.posts.dto.PostResponseDto;
-
 import org.sparta.newsfeed.domain.posts.entity.Post;
 import org.sparta.newsfeed.domain.posts.repository.PostRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.sparta.newsfeed.domain.users.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -15,8 +15,12 @@ import java.sql.Timestamp;
 @RequiredArgsConstructor
 public class PostService {
 
-    @Autowired
-    private PostRepository postRepository;
+    private final PostRepository postRepository;
+
+    private final UserRepository userRepository;
+
+    private final AuthService authService;
+
 
     //게시물 작성
     public PostResponseDto createPost(PostRequestDto postRequestDto) {
@@ -33,4 +37,12 @@ public class PostService {
         PostResponseDto.PostData postData = new PostResponseDto.PostData(post.getTitle(), post.getContent(), post.getCreatedAt(), post.getUpdatedAt());  // 응답 데이터 설정
         return new PostResponseDto(200, "게시물 작성 완료.", postData);  // 응답 DTO 반환
     }
+
+    //뉴스피드 조회
+
+    //게시물 수정
+
+    //게시물 삭제
+
+
 }

@@ -1,7 +1,8 @@
 # 스프링N코드
 
 ---
-![스크린샷 2024-09-03 오후 8.32.49.png](..%2F%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-09-03%20%EC%98%A4%ED%9B%84%208.32.49.png)
+![스크린샷 2024-09-03 오후 8 32 49](https://github.com/user-attachments/assets/ea9a9c96-e254-464f-ad64-d17a01825ec1)
+
 
 # Newsfeed Web Page v1.0
 
@@ -16,16 +17,16 @@
 
 본 프로젝트는 개인별 뉴스피드 조회를 바탕으로 한 SNS 입니다.<br>
 회원 가입을 통해 사용자를 저장하고, 개인별 게시물을 등록합니다.<br>
-개개인은 타인과 친구 관계를 맺고 해당 인물의 게시물을 뉴스피드를 통해 조회할 수 있습니다.
+개인은 타인과 친구 관계를 맺고 친구들의 게시물을 뉴스피드를 통해 조회할 수 있습니다.
 
 # 🧐 팀구성원
 
-| 이 름 | MBTI | 직책 |
-|-----|:----:|:--:|
-| 이승언 | ENFP | 팀장 |
-| 김도균 | INTP | 팀원 |
-| 김창민 | INFJ | 팀원 |
-| 나유화 | ENFJ | 팀원 |
+| 이 름 | MBTI | 직책 | 깃허브 주소 |
+|-----|:----:|:--:|:-------:|
+| 이승언 | ENFP | 팀장 ||
+| 김도균 | INTP | 팀원 ||
+| 김창민 | INFJ | 팀원 |[]()|
+| 나유화 | ENFJ | 팀원 ||
 
 # 🚀STACK
 
@@ -49,7 +50,8 @@ Communication
 
 # 📊 화면 구성 (와이어프레임)
 
-![스크린샷 2024-09-03 오후 8.39.49.png](..%2F%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-09-03%20%EC%98%A4%ED%9B%84%208.39.49.png)
+![와이어프레임](https://github.com/user-attachments/assets/bf7e5cc4-ffee-46bc-ba77-dff2c4d12190)
+
 [와이어프레임 링크](https://www.figma.com/design/XRmxY5EYKGOYDjLjS4zHl0/Untitled?node-id=0-1&node-type=CANVAS&t=HnsX7ZEXYgMGJVDe-0)
 
 # 📊 ERD
@@ -132,8 +134,3 @@ Communication
 
 
 ---
-
-
-
-
-

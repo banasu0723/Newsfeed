@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.sparta.newsfeed.domain.common.Timestamped;
+import org.sparta.newsfeed.domain.friendship.entity.Friendship;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -31,6 +35,10 @@ public class User extends Timestamped {
 
     @Column(nullable = false)
     private boolean activate;
+
+    // 친구 리스트
+    @OneToMany(mappedBy = "user")
+    private List<Friendship> friendshipUserList = new ArrayList<>();
 
 
     public User(String email, String password, String userName) {
