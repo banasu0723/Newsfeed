@@ -5,13 +5,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.sparta.newsfeed.domain.friendship.FriendshipRequestStatus;
 import org.sparta.newsfeed.domain.friendship.FriendshipStatus;
 import org.sparta.newsfeed.domain.friendship.dto.FriendshipRequestDto;
+import org.sparta.newsfeed.domain.friendship.dto.FriendshipResponseDto;
 import org.sparta.newsfeed.domain.friendship.entity.Friendship;
 import org.sparta.newsfeed.domain.friendship.repository.FriendshipRepository;
 import org.sparta.newsfeed.domain.users.entity.User;
 import org.sparta.newsfeed.domain.users.repository.UserRepository;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -132,6 +135,13 @@ public class FriendshipService {
         }
         return res;
 
+    }
+
+    public List<FriendshipResponseDto> getFriendsList(Long id, Pageable pageable) {
+        List<Friendship> friendsList = friendshipRepository.findByUserId(id, pageable);
+        return friendsList.stream()
+                .map(FriendshipResponseDto::toFriendResponseDto)
+                .toList();
     }
 }
 
