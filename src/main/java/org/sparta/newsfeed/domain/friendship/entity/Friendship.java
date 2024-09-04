@@ -42,8 +42,7 @@ public class Friendship extends Timestamped {
     private Long friendId;
 
     @Builder
-    public Friendship(Long id, User user, User friend, FriendshipStatus friendshipStatus, String myEmail, String friendEmail, FriendshipRequestStatus requestStatus, LocalDateTime modifiedAt, Long friendId) {
-        this.id = id;
+    public Friendship(User user, User friend, FriendshipStatus friendshipStatus, String myEmail, String friendEmail, FriendshipRequestStatus requestStatus, LocalDateTime modifiedAt, Long friendId) {
         this.user = user;
         this.friendshipStatus = friendshipStatus;
         this.myEmail = myEmail;

@@ -32,6 +32,8 @@ public class Comment {
 
     private Timestamp updatedAt;
 
+    private Integer likeCount = 0;
+
     public Comment(Post post, User user, String body) {
         this.post = post;
         this.user = user;
@@ -44,4 +46,11 @@ public class Comment {
         this.body = body;
         this.updatedAt = new Timestamp(System.currentTimeMillis());
     }
+
+    // 좋아요 설정
+    public void setLikeCount(Integer likeCount) {
+        this.likeCount = likeCount;
+    }
+
+
 }
