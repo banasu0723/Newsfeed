@@ -9,8 +9,8 @@ import org.sparta.newsfeed.domain.auth.dto.AuthUser;
 import org.sparta.newsfeed.domain.auth.dto.request.SignDeleteRequestDto;
 import org.sparta.newsfeed.domain.auth.dto.request.SigninRequestDto;
 import org.sparta.newsfeed.domain.auth.dto.request.SignupRequestDto;
-import org.sparta.newsfeed.domain.common.exception.CustomException;
-import org.sparta.newsfeed.domain.common.exception.ExceptionMessage;
+import org.sparta.newsfeed.domain.common.exception.ApplicationException;
+import org.sparta.newsfeed.domain.common.exception.ErrorCode;
 import org.sparta.newsfeed.domain.users.entity.User;
 import org.sparta.newsfeed.domain.users.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -175,13 +175,13 @@ public class AuthService {
             return new AuthUser(userId, email);
         } catch (IllegalArgumentException e) {
             log.error("토큰 파싱 오류: ", e);
-            throw new CustomException(ExceptionMessage.INVALID_TOKEN, "토큰 파싱 오류");
+            throw new ApplicationException(ErrorCode.INVALID_TOKEN, "토큰 파싱 오류");
         } catch (JwtException e) {
             log.error("JWT 오류: ", e);
-            throw new CustomException(ExceptionMessage.INVALID_TOKEN, "JWT 오류");
+            throw new ApplicationException(ErrorCode.INVALID_TOKEN, "JWT 오류");
         } catch (Exception e) {
             log.error("토큰 검증 실패: ", e);
-            throw new CustomException(ExceptionMessage.INVALID_TOKEN, e.getMessage());
+            throw new ApplicationException(ErrorCode.INVALID_TOKEN, e.getMessage());
         }
     }
 }
