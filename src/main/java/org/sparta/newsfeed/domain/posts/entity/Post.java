@@ -1,6 +1,7 @@
 package org.sparta.newsfeed.domain.posts.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,12 +11,16 @@ import java.sql.Timestamp;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(nullable = false)
     private String title;
@@ -28,7 +33,8 @@ public class Post {
     private Timestamp updatedAt;
 
     @Builder
-    public Post(String title, String content, Timestamp createdAt, Timestamp updatedAt) {
+    public Post(String title, String content, Timestamp createdAt, Timestamp updatedAt, User user) {
+        this.user = user;
         this.title = title;
         this.content = content;
         this.createdAt = createdAt;
