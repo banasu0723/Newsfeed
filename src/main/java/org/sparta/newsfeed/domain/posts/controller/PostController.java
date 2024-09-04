@@ -47,4 +47,16 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(res);
 
     }
+
+    // 게시물 수정
+    @PutMapping("/{postId}")
+    public PostResponseDto updatePost(@PathVariable Long postId, @RequestBody PostRequestDto postRequestDto) {
+        return postService.updatePost(postId, postRequestDto);
+    }
+
+    // 게시물 삭제
+    @DeleteMapping("/{postId}")
+    public void deletePost(@PathVariable Long postId) {
+        postService.deletePost(postId);
+    }
 }
