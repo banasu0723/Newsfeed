@@ -137,9 +137,18 @@ public class FriendshipService {
 
     }
 
+    // 친구 리스트 조회
     public List<FriendshipResponseDto> getFriendsList(Long id, Pageable pageable) {
-        List<Friendship> friendsList = friendshipRepository.findByUserId(id, pageable);
+        List<Friendship> friendsList = friendshipRepository.findFriendsByUserId(id, pageable);
         return friendsList.stream()
+                .map(FriendshipResponseDto::toFriendResponseDto)
+                .toList();
+    }
+
+    // 미승인 친구 요청 리스트 조회
+    public List<FriendshipResponseDto> getFriendRequestList(Long id, Pageable pageable) {
+        List<Friendship> friendRequestList = friendshipRepository.findFriendRequestsByUserId(id, pageable);
+        return friendRequestList.stream()
                 .map(FriendshipResponseDto::toFriendResponseDto)
                 .toList();
     }
