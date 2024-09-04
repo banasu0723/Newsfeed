@@ -14,40 +14,51 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    //CustomException 처리
+    // CustomException 처리
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity<String> handleCustomException(CustomException ex) {
-        log.error(ex.getConsoleMessage());
+    public ResponseEntity<Map<String, Object>> handleCustomException(CustomException ex) {
+        // 클라이언트에 보내는 오류 메시지와 상태 코드
+        Map<String, Object> errorResponse = new LinkedHashMap<>();
+        errorResponse.put("message", ex.getClientMessage());  // 오류 메시지
+        errorResponse.put("status", HttpStatus.BAD_REQUEST.value());  // 상태 코드
+
+        // 로그 메시지의 형식을 통일화
+        log.error("Error: {}", ex.getConsoleMessage());
 
         // MISSING_TOKEN 예외의 경우 401 Unauthorized 반환
         if (ex.getClientMessage().equals(ExceptionMessage.MISSING_TOKEN.getClientMessage())) {
-            return new ResponseEntity<>(ex.getClientMessage(), HttpStatus.UNAUTHORIZED);
+            errorResponse.put("status", HttpStatus.UNAUTHORIZED.value());
+            return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
         }
 
-        // 그 외의 CustomException 에 대해서는 400 Bad Request 반환
-        return new ResponseEntity<>(ex.getClientMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    //MethodArgumentNotValidException 처리
+    // 유효성 검사 실패 예외 처리
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new LinkedHashMap<>(); // 필드와 오류 메시지를 저장할 맵
-
-        //필드 오류 순회하며 오류 정보 맵에 추가
+        Map<String, String> errors = new LinkedHashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(error -> {
             String field = error.getField();
             String message = error.getDefaultMessage();
             errors.put(field, message);
-            log.error(ExceptionMessage.VALIDATION_ERROR.getConsoleMessage(field, message)); // 콘솔에 유효성 검사 오류 메시지 로그
+
+            // 로그 메시지의 형식을 통일화
+            log.error("Validation Error: Field = {}, Error = {}", field, message);
         });
 
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
-    // 추가된 예외 처리 핸들러
+    // 그 외의 예외 처리
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleAllExceptions(Exception ex) {
-        log.error("An unexpected error occurred: ", ex);
-        return new ResponseEntity<>("서버에 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<Map<String, Object>> handleAllExceptions(Exception ex) {
+        log.error("Unexpected Error: ", ex);
+
+        Map<String, Object> errorResponse = new LinkedHashMap<>();
+        errorResponse.put("message", "서버에 오류가 발생했습니다.");
+        errorResponse.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

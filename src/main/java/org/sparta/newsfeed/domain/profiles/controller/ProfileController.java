@@ -4,7 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.sparta.newsfeed.domain.profiles.dto.PasswordUpdateRequestDto;
 import org.sparta.newsfeed.domain.profiles.dto.ProfileResponseDto;
 import org.sparta.newsfeed.domain.profiles.dto.ProfileUpdateRequestDto;
+import org.sparta.newsfeed.domain.profiles.exception.CustomException;
+import org.sparta.newsfeed.domain.profiles.exception.ExceptionMessage;
 import org.sparta.newsfeed.domain.profiles.service.ProfileService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -27,10 +30,8 @@ public class ProfileController {
     @GetMapping("/{id}")
     public ResponseEntity<ProfileResponseDto> getProfile(@PathVariable Long id,
                                                          @RequestAttribute("userId") Long userId) {
-        // 요청한 ID와 사용자 ID가 일치하지 않는 경우, 접근 권한 오류
         if (!userId.equals(id)) {
-            log.error("사용자 ID 불일치: 토큰 ID = {}, 요청된 ID = {}", userId, id);
-            return ResponseEntity.status(403).body(null);
+            throw new CustomException(ExceptionMessage.FORBIDDEN_PROFILE_ACCESS);
         }
 
         ProfileResponseDto profile = profileService.getProfile(id);
@@ -43,10 +44,8 @@ public class ProfileController {
     public ResponseEntity<ProfileResponseDto> updateProfile(@PathVariable Long id,
                                                             @RequestBody @Valid ProfileUpdateRequestDto updateDto,
                                                             @RequestAttribute("userId") Long userId) {
-        // 요청한 ID와 사용자 ID가 일치하지 않는 경우
         if (!userId.equals(id)) {
-            log.error("사용자 ID 불일치: 토큰 ID = {}, 요청된 ID = {}", userId, id);
-            return ResponseEntity.status(403).body(null); // 403 Forbidden
+            throw new CustomException(ExceptionMessage.FORBIDDEN_PROFILE_ACCESS);
         }
 
         ProfileResponseDto updatedProfile = profileService.updateProfile(id, updateDto);
@@ -59,10 +58,8 @@ public class ProfileController {
     public ResponseEntity<String> changePassword(@PathVariable Long id,
                                                  @RequestBody @Valid PasswordUpdateRequestDto passwordUpdateDto,
                                                  @RequestAttribute("userId") Long userId) {
-        // 요청한 ID와 사용자 ID가 일치하지 않는 경우
         if (!userId.equals(id)) {
-            log.error("사용자 ID 불일치: 토큰 ID = {}, 요청된 ID = {}", userId, id);
-            return ResponseEntity.status(403).body("비밀번호 변경 권한이 없습니다.");
+            throw new CustomException(ExceptionMessage.FORBIDDEN_PROFILE_ACCESS);
         }
 
         profileService.changePassword(id, passwordUpdateDto);
