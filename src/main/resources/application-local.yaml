@@ -26,6 +26,9 @@ spring:
         max-file-size: 20MB   # 파일 하나의 최대 크기
         max-request-size: 25MB  # 전체 요청의 최대 크기
 
+      resources:
+        static-locations: classpath:/static/, file:/path/to/external/images/
+
 
 jwt:
   secret:
