@@ -7,17 +7,18 @@ public class ApplicationException extends RuntimeException {
     private final HttpStatus status;
     private final String clientMessage;
 
+    // 기존 생성자
     public ApplicationException(ErrorCode errorCode) {
         super(errorCode.getMessage());
         this.status = errorCode.getStatus();
         this.clientMessage = errorCode.getMessage();
     }
 
-    // 메시지 포맷팅을 위한 추가 생성자
-    public ApplicationException(ErrorCode errorCode, Object... args) {
-        super(errorCode.getFormattedMessage(args));
+    // 새로운 생성자: 추가 메시지 지원
+    public ApplicationException(ErrorCode errorCode, String customMessage) {
+        super(customMessage);
         this.status = errorCode.getStatus();
-        this.clientMessage = errorCode.getFormattedMessage(args);  // 클라이언트에게 포맷팅된 메시지 제공
+        this.clientMessage = customMessage; // 사용자 정의 메시지를 클라이언트로 반환
     }
 
     public HttpStatus getStatus() {
