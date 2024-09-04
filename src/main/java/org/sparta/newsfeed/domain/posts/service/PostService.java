@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,8 +28,6 @@ public class PostService {
     private final UserRepository userRepository;
     private final AuthService authService;
     private final FriendshipRepository friendshipRepository;
-
-
 
 
     //게시물 작성
@@ -55,7 +54,7 @@ public class PostService {
         // 사용자의 친구 목록에서 친구들의 ID를 가져옴
         List<Long> friendIds = friendshipRepository.findAllFriendIdsByUserId(userId);
 
-        // 친구들의 ID에 해당하는 게시물만 필터링하여 반환
+        // 친구들의 ID에 해당하는 게시물만 필터링하여 반환(SELECT * FROM Post WHERE user_id IN (?, ?, ?, ...) LIMIT 10 OFFSET 0;)
         List<Post> friendPosts = postRepository.findByUserIdIn(friendIds, pageable);
 
         // 가져온 친구 게시물들 Dto로 변환하면 반환
@@ -64,14 +63,10 @@ public class PostService {
                     PostResponseDto.PostData postData = new PostResponseDto.PostData(
                             post.getTitle(), post.getContent(), post.getCreatedAt(), post.getUpdatedAt()
                     );
-                    return new PostResponseDto(200, "친구의 게시물 조회 성공", postData);
+                    return new PostResponseDto(200, "친구의 뉴스피드 조회 성공", postData);
                 })
                 .collect(Collectors.toList());
     }
-
-
-
-
 
     //게시물 수정
     public PostResponseDto updatePost(Long postId, PostRequestDto postRequestDto) {
@@ -81,6 +76,20 @@ public class PostService {
         postRepository.save(post);  // 수정된 게시물 저장
         PostResponseDto.PostData postData = new PostResponseDto.PostData(post.getTitle(), post.getContent(), post.getCreatedAt(), post.getUpdatedAt());  // 응답 데이터 설정
         return new PostResponseDto(200, "게시물 수정 완료.", postData);  // 응답 DTO 반환
+    }
+
+    // 내 게시글 조회
+    public List<PostResponseDto> getMyPosts(Long userId, Pageable pageable) {
+        List<Post> myPost = postRepository.findByUserId(userId, pageable);
+
+        return myPost.stream()
+                .map(post -> {
+                    PostResponseDto.PostData postData = new PostResponseDto.PostData(
+                            post.getTitle(), post.getContent(), post.getCreatedAt(), post.getUpdatedAt()
+                    );
+                    return new PostResponseDto(200, "내 게시물 조회 성공", postData);
+                })
+                .collect(Collectors.toList());
     }
 
     //게시물 삭제
