@@ -55,8 +55,9 @@ Communication
 [와이어프레임 링크](https://www.figma.com/design/XRmxY5EYKGOYDjLjS4zHl0/Untitled?node-id=0-1&node-type=CANVAS&t=HnsX7ZEXYgMGJVDe-0)
 
 # 📊 ERD
+![스크린샷 2024-09-04 오후 7 22 33](https://github.com/user-attachments/assets/5fc478e1-329a-4498-a8f2-b1f4805e767e)
 
-추후 추가
+
 
 # 🏗️ 프로젝트 디렉토리 구조
 
