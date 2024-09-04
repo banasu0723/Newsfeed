@@ -35,7 +35,7 @@ public class PostController {
 
 
     // 친구 뉴스피드 조회
-    @GetMapping
+    @GetMapping("/newsfeeds")
     public ResponseEntity<List<PostResponseDto>> getFriendNewsfeeds(HttpServletRequest httpRequest, @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         log.info("친구 뉴스피드 목록 조회 - 페이지 인덱스: {}, 페이지: {}, 사이즈: {}", pageable.getPageNumber(), pageable.getPageNumber() + 1, pageable.getPageSize());
 
@@ -43,9 +43,18 @@ public class PostController {
         Long userId = (Long) httpRequest.getAttribute("userId");
         List<PostResponseDto> res = postService.getFriendNewsfeeds(userId, pageable);
 
-        log.info("{} 페이지에서 조회된 일정 수: {} 개", pageable.getPageNumber() + 1, res.size());
+        log.info("{} 페이지에서 조회된 뉴스피드 수: {} 개", pageable.getPageNumber() + 1, res.size());
         return ResponseEntity.status(HttpStatus.OK).body(res);
 
+    }
+
+
+    // 개인 모든 게시글 조회
+    @GetMapping
+    public ResponseEntity<List<PostResponseDto>> getMyPosts(HttpServletRequest httpRequest, @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        Long userId = (Long) httpRequest.getAttribute("userId");
+        List<PostResponseDto> res = postService.getMyPosts(userId, pageable);
+        return ResponseEntity.ok(res);
     }
 
     // 게시물 수정
@@ -59,4 +68,5 @@ public class PostController {
     public void deletePost(@PathVariable Long postId) {
         postService.deletePost(postId);
     }
+
 }
