@@ -3,12 +3,12 @@
 ---
 ![스크린샷 2024-09-03 오후 8 32 49](https://github.com/user-attachments/assets/ea9a9c96-e254-464f-ad64-d17a01825ec1)
 
-
 # Newsfeed Web Page v1.0
 
 ---
 
 ## 배포 주소
+
 [깃허브](https://github.com/banasu0723/Newsfeed)
 
 ---
@@ -55,11 +55,13 @@ Communication
 [와이어프레임 링크](https://www.figma.com/design/XRmxY5EYKGOYDjLjS4zHl0/Untitled?node-id=0-1&node-type=CANVAS&t=HnsX7ZEXYgMGJVDe-0)
 
 # 📊 ERD
+
 ![image](https://github.com/user-attachments/assets/19c2a294-4761-42dd-bc4d-f4aa0b75a7fa)
 
 # SQL(MySQL)
 
-```sql
+```
+sql
 Table users {
   id bigint [primary key]
   email varchar(50) [not null, unique]
@@ -114,12 +116,10 @@ Ref: comments.user_id > users.id
 
 ```
 
-
-
-
 # 🏗️ 프로젝트 디렉토리 구조
 
-```├── README.md
+```
+├── README.md
 ├── build
 │   ├── classes
 │   │   └── java
@@ -152,6 +152,18 @@ Ref: comments.user_id > users.id
 │   │                           │   │       └── SignupResponseDto.class
 │   │                           │   └── service
 │   │                           │       └── AuthService.class
+│   │                           ├── comments
+│   │                           │   ├── controller
+│   │                           │   │   └── CommentController.class
+│   │                           │   ├── dto
+│   │                           │   │   ├── CommentRequestDto.class
+│   │                           │   │   └── CommentResponseDto.class
+│   │                           │   ├── entity
+│   │                           │   │   └── Comment.class
+│   │                           │   ├── repository
+│   │                           │   │   └── CommentRepository.class
+│   │                           │   └── service
+│   │                           │       └── CommentService.class
 │   │                           ├── common
 │   │                           │   ├── Timestamped.class
 │   │                           │   └── exception
@@ -218,26 +230,16 @@ Ref: comments.user_id > users.id
 │           ├── compileTransaction
 │           │   ├── backup-dir
 │           │   └── stash-dir
-│           │       ├── AuthController.class.uniqueId8
-│           │       ├── AuthService.class.uniqueId11
-│           │       ├── CustomException.class.uniqueId16
-│           │       ├── ExceptionMessage.class.uniqueId19
-│           │       ├── FilterConfig.class.uniqueId4
-│           │       ├── GlobalExceptionHandler.class.uniqueId12
-│           │       ├── JwtFilter.class.uniqueId18
-│           │       ├── JwtUtil.class.uniqueId0
-│           │       ├── NewsfeedApplication.class.uniqueId17
-│           │       ├── Post$PostBuilder.class.uniqueId15
-│           │       ├── Post.class.uniqueId14
-│           │       ├── PostController.class.uniqueId3
-│           │       ├── PostRepository.class.uniqueId13
-│           │       ├── PostService.class.uniqueId7
-│           │       ├── ProfileController.class.uniqueId10
-│           │       ├── ProfileService.class.uniqueId9
-│           │       ├── Timestamped.class.uniqueId1
-│           │       ├── User.class.uniqueId6
-│           │       ├── UserRepository.class.uniqueId5
-│           │       └── entity.class.uniqueId2
+│           │       ├── FriendshipController.class.uniqueId4
+│           │       ├── FriendshipRepository.class.uniqueId9
+│           │       ├── FriendshipService.class.uniqueId7
+│           │       ├── Post$PostBuilder.class.uniqueId6
+│           │       ├── Post.class.uniqueId3
+│           │       ├── PostController.class.uniqueId0
+│           │       ├── PostRepository.class.uniqueId2
+│           │       ├── PostResponseDto$PostData.class.uniqueId8
+│           │       ├── PostResponseDto.class.uniqueId1
+│           │       └── PostService.class.uniqueId5
 │           └── previous-compilation-data.bin
 ├── build.gradle
 ├── gradle
@@ -278,6 +280,18 @@ Ref: comments.user_id > users.id
     │   │                   │   │       └── SignupResponseDto.java
     │   │                   │   └── service
     │   │                   │       └── AuthService.java
+    │   │                   ├── comments
+    │   │                   │   ├── controller
+    │   │                   │   │   └── CommentController.java
+    │   │                   │   ├── dto
+    │   │                   │   │   ├── CommentRequestDto.java
+    │   │                   │   │   └── CommentResponseDto.java
+    │   │                   │   ├── entity
+    │   │                   │   │   └── Comment.java
+    │   │                   │   ├── repository
+    │   │                   │   │   └── CommentRepository.java
+    │   │                   │   └── service
+    │   │                   │       └── CommentService.java
     │   │                   ├── common
     │   │                   │   ├── Timestamped.java
     │   │                   │   └── exception
@@ -333,75 +347,95 @@ Ref: comments.user_id > users.id
                 └── sparta
                     └── newsfeed
                         └── NewsfeedApplicationTests.java
-```                        
+
+109 directories, 120 files
+```
 
 # API 명세
 
-| 기능       | Method   | URL                            | request | response      | 상태코드         |
-|----------|----------|--------------------------------|---------|---------------|--------------|
-| 마이페이지 조회 | `GET`    | `/profiles/{id}`               | Body    | 등록 정보         | `200 : 정상조회` |
-| 프로필 수정   | `PUT`    | `/profiles/{id}`               | Body    | 수정 정보         | `200 : 정상수정` |
-| 비밀번호 변경  | `POST`   | `/profiles/{id}/change-pwd`    | Body    | 변경 메시지        | `200 : 정상수정` |
-| 게시물 작성   | `POST`   | `/posts`                       | Body    | 등록 정보         | `201 : 정상작성` |
-| 게시물 조회   | `GET`    | `/posts`                   |    | 게시물 내용        | `200 : 정상조회` |
-| 게시물 수정   | `PUT`    | `/posts/{id}`                  | Body    | 수정 정보         | `200 : 정상수정` |
-| 게시물 삭제   | `DELETE` | `/posts/{id}`                  | Param   | 삭제 메시지        | `200 : 정상삭제` |
-| 뉴스피드 조회  | `GET`    | `/posts/newsfeeds`                       | Body    | 페이지네이션 된 뉴스피드 | `200 : 정상조회` |
-| 회원 가입    | `POST`   | `/auth/signup`                 | Body    | 가입 메시지        | `201 : 정상가입` |
-| 회원 탈퇴    | `POST`   | `/auth/signdelete`             | Body    | 탈퇴 메시지        | `200 : 정상탈퇴` |
-| 로그인      | `POST`   | `/auth/signin`                 | Body    | JWT           | `200 : 정상처리` |
-| 친구 요청    | `POST`   | `/friendships`                 | Body    | 요청 메시지        | `200 : 정상요청` |
-| 친구 수락    | `PUT`  | `/friendships/{friendshipsid}`                 | -       | 수락 메시지        | `200 : 정상요청` |
-| 친구 삭제 및 거절    | `DELETE` | `/friendships/{friendshipsid}` | -       | 삭제 메시지        | `200 : 정상삭제` |
-| 친구 리스트   | `GET`    | `/friendships`                 | -       | 친구 리스트        | `200 : 정상조회` |
-| 친구 요청 조회 |          |                                | -       | -             | `200 : 정상조회` |
+| 기능       | Method   | URL                                    | request | response      | 상태코드         |
+|----------|----------|----------------------------------------|---------|---------------|--------------|
+| 마이페이지 조회 | `GET`    | `/profiles/{id}`                       | Body    | 등록 정보         | `200 : 정상조회` |
+| 프로필 수정   | `PUT`    | `/profiles/{id}`                       | Body    | 수정 정보         | `200 : 정상수정` |
+| 비밀번호 변경  | `POST`   | `/profiles/{id}/change-pwd`            | Body    | 변경 메시지        | `200 : 정상수정` |
+| 게시물 작성   | `POST`   | `/posts`                               | Body    | 등록 정보         | `201 : 정상작성` |
+| 게시물 조회   | `GET`    | `/post/{id}`                           | Param   | 게시물 내용        | `200 : 정상조회` |
+| 게시물 수정   | `PUT`    | `/posts/{id}`                          | Body    | 수정 정보         | `200 : 정상수정` |
+| 게시물 삭제   | `DELETE` | `/posts/{id}`                          | Param   | 삭제 메시지        | `200 : 정상삭제` |
+| 뉴스피드 조회  | `GET`    | `/posts`                               | Body    | 페이지네이션 된 뉴스피드 | `200 : 정상조회` |
+| 회원 가입    | `POST`   | `/auth/signup`                         | Body    | 가입 메시지        | `201 : 정상가입` |
+| 회원 탈퇴    | `POST`   | `/auth/signdelete`                     | Body    | 탈퇴 메시지        | `200 : 정상탈퇴` |
+| 로그인      | `POST`   | `/auth/signin`                         | Body    | JWT           | `200 : 정상처리` |
+| 친구 요청    | `POST`   | `/friendships`                         | Body    | 요청 메시지        | `200 : 정상요청` |
+| 친구 수락    | `PATCH`  | `/friendships`                         | -       | 수락 메시지        | `200 : 정상요청` |
+| 친구 삭제    | `DELETE` | `/friendships/{friendshipsid}`         | -       | 삭제 메시지        | `200 : 정상삭제` |
+| 친구 거절    | `DELETE` | `/friendships/reject`                  | -       | -             | `200 : 정상요청` |
+| 친구 리스트   | `GET`    | `/friendships`                         | -       | 친구 리스트        | `200 : 정상조회` |
+| 친구 요청 조회 |          |                                        | -       | -             | `200 : 정상조회` |
+| 댓글 작성    | `POST`   | `/posts/{postId}/comments`             | Body    | 작성한 댓글 내용     | `200 : 정상생성` |
+| 댓글 조회    | `GET`    | `/posts/{postId}/comments`             | -       | 댓글 내용         | `200 : 정상조회` |
+| 댓글 수정    | `PUT`    | `/posts/{postId}/comments/{commentId}` | Body    | 수정한 댓글 내용     | `200 : 정상수정` |
+| 댓글 삭제    | `DELETE` | `/posts/{postId}/comments/{commentId}` | -       | 삭제 메시지        | `200 : 정상삭제` |
 
 # ⚒️주요 기능
 
-- **프로필 및 민감 정보 관리**
-  1. 프로필 조회 
+---
+### **프로필 및 민감 정보 관리**
+
+1. 프로필 조회
   > 프로필을 조회합니다.
-  2. 프로필 수정 
-  > 이름, 소개, 프로필 사진을 수정합니다.
-  3. 비밀번호 수정 
-  > 계정 비밀번호를 변경합니다.
- 
-- **게시물 관리**
-  1. 게시물 작성 
+
+2. 프로필 수정
+  > 이름, 소개, 프로필 사진을 수정합니다. 
+3. 비밀번호 수정
+  >계정 비밀번호를 변경합니다.
+---
+### **게시물 관리**
+1. 게시물 작성
   > 게시물 제목, 내용을 입력하여 게시물을 생성합니다.
-  2. 게시물 조회 
+2. 게시물 조회
   > 게시물 번호를 통해 게시물을 조회합니다.
-  3. 게시물 수정 
+3. 게시물 수정
   > 게시물의 제목, 내용을 수정합니다.
-  4. 게시물 삭제 
+4. 게시물 삭제
   > 게시물을 삭제 합니다.
-  5. 뉴스피드 조회 
+5. 뉴스피드 조회
   > 나와 친구관계인 유저의 게시물들을 생성일자 기준으로 내림차순 정렬합니다.
 
-
-- **사용자 인증**
-  1. 회원 가입 
+---
+### **사용자 인증**
+1. 회원 가입
   > 이메일 형식의 아이디와 비밀번호를 이용해 회원을 등록합니다.
-  2. 회원 탈퇴 
+2. 회원 탈퇴
   > 회원 계정의 상태를 activated = false 로 변환합니다.
-  3. 로그인 
+3. 로그인
   > 이메일과 비밀번호가 일치시 JWT를 반환 받습니다.
-  4. 로그아웃 
-  > JWT의 만료 시점을 현 시점으로 변경합니다.
-  
-- **친구관계 관리**
-  1. 친구 요청 
+
+~~4. 로그아웃~~(개발 취소)
+  > ~~JWT의 만료 시점을 현 시점으로 변경합니다.~~
+
+---
+### **친구관계 관리**
+1. 친구 요청
   > 상대방에게 친구 요청을 보냅니다.
-  2. 친구 수락 
+2. 친구 수락
   > 친구 요청을 수락합니다.
-  3. 친구 삭제 
+3. 친구 삭제
   > 친구 관계를 종료합니다.
-  4. 친구 거절 
+4. 친구 거절
   > 친구 요청을 거절합니다.
-  5. 친구 리스트 
+5. 친구 리스트
   > 친구 관계의 유저들을 조회합니다.
-  6. 친구 요청 조회 
+6. 친구 요청 조회
   > 친구 요청들을 조회합니다.
 
-
+- **댓글 관련 기능**
+1. 댓글 작성
+  > 특정 게시물에 댓글을 작성합니다.
+2. 댓글 조회
+  > 특정 게시물에 저장된 댓글을 전부 조회합니다.
+3. 댓글 수정
+  > 댓글 작성자와 현 로그인 유저가 동일할 경우 해당 댓글을 수정합니다.
+4. 댓글 삭제
+  > 댓글 작성자와 현 로그인 유저가 동일할 경우 해당 댓글을 삭제합니다.
 ---
