@@ -10,6 +10,7 @@ import org.sparta.newsfeed.domain.users.entity.User;
 import org.sparta.newsfeed.domain.users.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -28,6 +29,10 @@ public class LikeService {
     public String addLikeAtPost(Long postId, User user) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 게시물입니다."));
+
+        if (post.getUser().getId() == user.getId()) {
+            throw new IllegalArgumentException("본인이 남긴 게시글에는 '좋아요'를 누를 수 없습니다");
+        }
 
         // 좋아요 개수 초기화(Null 방지)
         Integer existingLikeCount = post.getLikeCount() != null ? post.getLikeCount() : 0;
@@ -60,6 +65,10 @@ public class LikeService {
         Post post = postRepository.findById(postId).get();
 
         Comment comment = likeRepository.findByPostIdAndCommentId(postId, commentId);
+
+        if (post.getUser().getId() == user.getId() || comment.getUser().getId() == user.getId()) {
+            throw new IllegalArgumentException("본인이 남긴 게시글에는 '좋아요'를 누를 수 없습니다");
+        }
 
         // 좋아요 개수 초기화(Null 방지)
         Integer existingLikeCount = comment.getLikeCount() != null ? comment.getLikeCount() : 0;
