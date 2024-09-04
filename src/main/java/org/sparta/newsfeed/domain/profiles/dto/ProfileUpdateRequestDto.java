@@ -3,6 +3,7 @@ package org.sparta.newsfeed.domain.profiles.dto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @AllArgsConstructor
@@ -13,5 +14,5 @@ public class ProfileUpdateRequestDto {
 
     private final String introduction;
 
-    private final String profileImage;
+    private final MultipartFile profileImage;
 }

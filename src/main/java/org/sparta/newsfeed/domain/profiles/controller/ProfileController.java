@@ -10,8 +10,10 @@ import org.sparta.newsfeed.domain.profiles.service.ProfileService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
+import java.io.IOException;
 
 @Slf4j
 @RestController
@@ -40,13 +42,17 @@ public class ProfileController {
 
     //프로필 업데이트
     @PutMapping("/{id}")
-    public ResponseEntity<ProfileResponseDto> updateProfile(@PathVariable Long id,
-                                                            @RequestBody @Valid ProfileUpdateRequestDto updateDto,
-                                                            @RequestAttribute("userId") Long userId) {
+    public ResponseEntity<ProfileResponseDto> updateProfile(
+            @PathVariable Long id,
+            @RequestParam("name") String name,
+            @RequestParam("introduction") String introduction,
+            @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
+            @RequestAttribute("userId") Long userId) throws IOException {
         if (!userId.equals(id)) {
             throw new CustomException(ExceptionMessage.FORBIDDEN_PROFILE_ACCESS);
         }
 
+        ProfileUpdateRequestDto updateDto = new ProfileUpdateRequestDto(name, introduction, profileImage);
         ProfileResponseDto updatedProfile = profileService.updateProfile(id, updateDto);
         log.info("프로필 수정 성공 - ID: {}", id);
         return ResponseEntity.ok(updatedProfile);
