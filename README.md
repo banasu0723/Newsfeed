@@ -55,7 +55,65 @@ Communication
 [와이어프레임 링크](https://www.figma.com/design/XRmxY5EYKGOYDjLjS4zHl0/Untitled?node-id=0-1&node-type=CANVAS&t=HnsX7ZEXYgMGJVDe-0)
 
 # 📊 ERD
-![스크린샷 2024-09-04 오후 7 22 33](https://github.com/user-attachments/assets/5fc478e1-329a-4498-a8f2-b1f4805e767e)
+![image](https://github.com/user-attachments/assets/19c2a294-4761-42dd-bc4d-f4aa0b75a7fa)
+
+# SQL(MySQL)
+
+```sql
+Table users {
+  id bigint [primary key]
+  email varchar(50) [not null, unique]
+  password varchar(50) [not null]
+  name varchar (20) [not null]
+  image varchar (100)
+  introduction varchar (255)
+  activate boolean [not null]
+  created_at timestamp  [not null]
+  modified_at timestamp [not null]
+}
+
+Table posts {
+  id bigint [primary key]
+  user_id bigint  [not null]
+  title varchar(100)  [not null]
+  body text [note: 'Content of the post', not null] 
+  created_at timestamp  [not null]
+  modified_at timestamp [not null]
+}
+
+Table friendship {
+  id bigint [primary key] 
+  user_id bigint  [not null]
+  friendship_status enum  [not null] //신청 수락 
+  request_status enum [not null]
+  friend_id bigint  [not null]
+  created_at timestamp  [not null]
+  modified_at timestamp [not null]
+  my_email varchar(50) [not null]
+  friend_email varchar(50) [not null]
+}
+
+Table comments {
+  id bigint [primary key]
+  post_id bigint [not null]
+  user_id bigint [not null]
+  body text [not null]
+  created_at timestamp [not null]
+  modified_at timestamp [not null]
+}
+
+Ref: posts.user_id > users.id // many-to-one
+
+Ref: users.id < friendship.user_id
+
+Ref: users.id < friendship.friend_id
+
+Ref: comments.post_id > posts.id
+
+Ref: comments.user_id > users.id
+
+```
+
 
 
 
