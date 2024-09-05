@@ -66,8 +66,8 @@ public class LikeService {
 
         Comment comment = likeRepository.findByPostIdAndCommentId(postId, commentId);
 
-        if (post.getUser().getId() == user.getId() || comment.getUser().getId() == user.getId()) {
-            throw new IllegalArgumentException("본인이 남긴 게시글에는 '좋아요'를 누를 수 없습니다");
+        if(comment.getUser().getId() == user.getId()){
+            throw new IllegalArgumentException("본인이 남긴 댓글에는 '좋아요'를 누를 수 없습니다");
         }
 
         // 좋아요 개수 초기화(Null 방지)
