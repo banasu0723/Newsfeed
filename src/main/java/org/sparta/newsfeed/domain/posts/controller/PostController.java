@@ -3,6 +3,8 @@ package org.sparta.newsfeed.domain.posts.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sparta.newsfeed.annotation.Auth;
+import org.sparta.newsfeed.domain.auth.dto.AuthUser;
 import org.sparta.newsfeed.domain.posts.dto.PostRequestDto;
 import org.sparta.newsfeed.domain.posts.dto.PostResponseDto;
 import org.sparta.newsfeed.domain.posts.service.PostService;
@@ -33,7 +35,6 @@ public class PostController {
         return postService.createPost(postRequestDto, userId);
     }
 
-
     // 친구 뉴스피드 조회
     @GetMapping("/newsfeeds")
     public ResponseEntity<List<PostResponseDto>> getFriendNewsfeeds(HttpServletRequest httpRequest, @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
@@ -48,7 +49,6 @@ public class PostController {
 
     }
 
-
     // 개인 모든 게시글 조회
     @GetMapping
     public ResponseEntity<List<PostResponseDto>> getMyPosts(HttpServletRequest httpRequest, @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
@@ -59,14 +59,15 @@ public class PostController {
 
     // 게시물 수정
     @PutMapping("/{postId}")
-    public PostResponseDto updatePost(@PathVariable Long postId, @RequestBody PostRequestDto postRequestDto) {
-        return postService.updatePost(postId, postRequestDto);
+    public ResponseEntity<PostResponseDto> updatePost(@Auth AuthUser authUser, @PathVariable Long postId, @RequestBody PostRequestDto postRequestDto, HttpServletRequest httpRequest) {
+        return ResponseEntity.ok(postService.updatePost(authUser,postId, postRequestDto));
     }
 
     // 게시물 삭제
     @DeleteMapping("/{postId}")
-    public void deletePost(@PathVariable Long postId) {
-        postService.deletePost(postId);
+    public ResponseEntity<String> deletePost(@Auth AuthUser authUser, @PathVariable Long postId, HttpServletRequest httpRequest) {
+        postService.deletePost(authUser,postId);
+        return ResponseEntity.ok("게시물이 삭제되었습니다.");
     }
 
 }
