@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sparta.newsfeed.domain.comments.entity.Comment;
 import org.sparta.newsfeed.domain.comments.repository.CommentRepository;
+import org.sparta.newsfeed.domain.common.exception.ApplicationException;
+import org.sparta.newsfeed.domain.common.exception.ErrorCode;
 import org.sparta.newsfeed.domain.posts.entity.Post;
 import org.sparta.newsfeed.domain.posts.repository.PostRepository;
 import org.sparta.newsfeed.domain.users.entity.User;
@@ -25,13 +27,13 @@ public class LikeService {
     private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
 
-    // 뉴스피드에 좋아요 누르고 취소하는 메서드(개추 ㅋ)
+    // 뉴스피드에 좋아요 누르거나 취소하는 메서드
     public String addLikeAtPost(Long postId, User user) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 게시물입니다."));
+                .orElseThrow(() -> new ApplicationException(ErrorCode.POST_NOT_FOUND));
 
-        if (post.getUser().getId() == user.getId()) {
-            throw new IllegalArgumentException("본인이 남긴 게시글에는 '좋아요'를 누를 수 없습니다");
+        if (post.getUser().getId().equals(user.getId())) {
+            throw new ApplicationException(ErrorCode.NOT_MY_POST);
         }
 
         // 좋아요 개수 초기화(Null 방지)
@@ -59,15 +61,15 @@ public class LikeService {
     }
 
 
-    // 뉴스피드 댓글에 좋아요 누르고 취소하는 메서드
+    // 뉴스피드 댓글에 좋아요 누르거나 취소하는 메서드
     public String addLikeAtComment(Long postId, Long commentId, User user) {
 
         Post post = postRepository.findById(postId).get();
 
         Comment comment = likeRepository.findByPostIdAndCommentId(postId, commentId);
 
-        if(comment.getUser().getId() == user.getId()){
-            throw new IllegalArgumentException("본인이 남긴 댓글에는 '좋아요'를 누를 수 없습니다");
+        if (comment.getUser().getId().equals(user.getId())) {
+            throw new ApplicationException(ErrorCode.NOT_MY_COMMENT);
         }
 
         // 좋아요 개수 초기화(Null 방지)
