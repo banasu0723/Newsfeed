@@ -32,6 +32,8 @@ public class Post {
 
     private Timestamp updatedAt;
 
+    private Integer likeCount =0; // 좋아요 수
+
     @Builder
     public Post(String title, String content, Timestamp createdAt, Timestamp updatedAt, User user) {
         this.user = user;
@@ -48,4 +50,11 @@ public class Post {
         this.updatedAt = new Timestamp(System.currentTimeMillis());
         return this;
     }
+
+    // 좋아요 설정
+    public void setLikeCount(Integer likeCount) {
+        this.likeCount = likeCount;
+    }
+
+
 }
