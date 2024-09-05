@@ -51,17 +51,21 @@ public class FriendshipController {
 
     // 친구 요청 수락
     @PutMapping("/{friendshipId}")
-    public ResponseEntity<String> acceptFriendship(@PathVariable("friendshipId") Long friendshipId) {
+    public ResponseEntity<String> acceptFriendship(@PathVariable("friendshipId") Long friendshipId, HttpServletRequest request) {
 
-        friendshipService.acceptFriendship(friendshipId);
+        String loginUserEmail = request.getAttribute("email").toString();
+
+        friendshipService.acceptFriendship(friendshipId, loginUserEmail);
         return ResponseEntity.ok("친구 요청 수락 완료");
     }
 
     // 친구 요청 거절 및 친구 삭제
     @DeleteMapping("/{friendshipId}")
-    public ResponseEntity<String> rejectFriendship(@PathVariable Long friendshipId) {
+    public ResponseEntity<String> rejectFriendship(@PathVariable Long friendshipId, HttpServletRequest request) {
 
-        String res = friendshipService.rejectFriendship(friendshipId);
+        String loginUserEmail = request.getAttribute("email").toString();
+
+        String res = friendshipService.rejectFriendship(friendshipId, loginUserEmail);
         return ResponseEntity.ok(res);
     }
 
