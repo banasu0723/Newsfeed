@@ -46,16 +46,29 @@ public class ProfileService {
         );
     }
 
-    // 프로필 업데이트 메소드
+    // 프로필 업데이트
     @Transactional
     public ProfileResponseDto updateProfile(Long id, ProfileUpdateRequestDto updateDto) throws IOException {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ApplicationException(ErrorCode.USER_NOT_FOUND));
 
-        // 새로운 이미지가 업로드되면 이미지 저장 처리
+        // 기존 프로필 이미지 이름 저장
+        String existingProfileImageName = user.getProfileImage();
+
+        // 새로운 이미지가 업로드된 경우 처리
         String profileImageName = null;
         if (updateDto.getProfileImage() != null && !updateDto.getProfileImage().isEmpty()) {
+            // 새로운 이미지를 저장하고 파일 이름을 가져옴
             profileImageName = saveProfileImage(updateDto.getProfileImage());
+
+            // 기존 이미지가 있는 경우 삭제
+            if (existingProfileImageName != null) {
+                deleteProfileImage(existingProfileImageName);
+            }
+        } else if (updateDto.getProfileImage() == null && existingProfileImageName != null) {
+            // 이미지가 null로 보내졌고, 기존 이미지가 있는 경우 삭제
+            deleteProfileImage(existingProfileImageName);
+            profileImageName = null; // 이미지가 null임을 명시
         }
 
         user.updateProfile(updateDto.getName(), updateDto.getIntroduction(), profileImageName);
@@ -94,12 +107,22 @@ public class ProfileService {
         userRepository.save(user);
     }
 
-    // 프로필 이미지를 저장하는 메소드
+    // 프로필 이미지를 저장
     private String saveProfileImage(MultipartFile profileImage) throws IOException {
         String imageName = UUID.randomUUID().toString() + "_" + profileImage.getOriginalFilename();
         File imageFile = new File(IMAGE_DIR + imageName);
-        imageFile.getParentFile().mkdirs(); // 이미지 저장 경로 생성
+        imageFile.getParentFile().mkdirs(); // 디렉토리 없을때 이미지 저장 경로 생성
         Files.write(Paths.get(imageFile.getAbsolutePath()), profileImage.getBytes());
         return imageName;
+    }
+
+    // 프로필 이미지 삭제
+    private void deleteProfileImage(String imageName) {
+        File file = new File(IMAGE_DIR + imageName);
+        if (file.exists()) {
+            if (!file.delete()) {
+                throw new ApplicationException(ErrorCode.GENERAL_EXCEPTION);
+            }
+        }
     }
 }

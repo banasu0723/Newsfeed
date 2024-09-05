@@ -17,7 +17,9 @@ public enum ErrorCode {
 
     COMMENT_NOT_FOUND("댓글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     FORBIDDEN_COMMENT_ACCESS("댓글에 대한 접근 권한이 없습니다.", HttpStatus.FORBIDDEN),
-    POST_NOT_FOUND("게시글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
+    POST_NOT_FOUND("게시글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+
+    IMAGE_DELETE_FAIL("이미지 삭제에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final String message;
     private final HttpStatus status;

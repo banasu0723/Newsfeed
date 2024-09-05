@@ -44,7 +44,7 @@ public class ProfileController {
     @PutMapping("/{id}")
     public ResponseEntity<ProfileResponseDto> updateProfile(
             @PathVariable Long id,
-            @Valid @ModelAttribute ProfileUpdateRequestDto profileUpdateRequestDto,  // @Valid와 @ModelAttribute 사용
+            @Valid @ModelAttribute ProfileUpdateRequestDto profileUpdateRequestDto,
             @RequestAttribute("userId") Long userId) throws IOException {
         // 접근 권한이 없으면 예외 발생
         if (!userId.equals(id)) {
