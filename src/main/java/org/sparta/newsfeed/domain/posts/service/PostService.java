@@ -1,7 +1,11 @@
 package org.sparta.newsfeed.domain.posts.service;
 
 import lombok.RequiredArgsConstructor;
+import org.sparta.newsfeed.annotation.Auth;
+import org.sparta.newsfeed.domain.auth.dto.AuthUser;
 import org.sparta.newsfeed.domain.auth.service.AuthService;
+import org.sparta.newsfeed.domain.common.exception.ApplicationException;
+import org.sparta.newsfeed.domain.common.exception.ErrorCode;
 import org.sparta.newsfeed.domain.friendship.repository.FriendshipRepository;
 import org.sparta.newsfeed.domain.posts.dto.PostRequestDto;
 import org.sparta.newsfeed.domain.posts.dto.PostResponseDto;
@@ -16,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,8 +72,12 @@ public class PostService {
     }
 
     //게시물 수정
-    public PostResponseDto updatePost(Long postId, PostRequestDto postRequestDto) {
+    public PostResponseDto updatePost(@Auth AuthUser authUser, Long postId, PostRequestDto postRequestDto) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("게시물이 없습니다."));  // 게시물 조회
+
+        if (!post.getUser().getId().equals(authUser.getId())) { // post의 제작자가, 현재 로그인한 사람이 아니면
+            throw new ApplicationException(ErrorCode.FORBIDDEN_COMMENT_ACCESS); // 예외 처리
+        }
 
         post.update(postRequestDto.getTitle(), postRequestDto.getContent());  // 게시물 수정
         postRepository.save(post);  // 수정된 게시물 저장
@@ -92,11 +99,22 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
-    //게시물 삭제
-    public void deletePost(Long postId) {
-        Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));  // 게시물 조회
+    // 게시물 삭제
+    public void deletePost(AuthUser authUser, Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("게시물이 없습니다"));  // 게시물 조회
+
+        if (!post.getUser().getId().equals(authUser.getId())) { // post의 제작자가, 현재 로그인한 사람이 아니면
+            throw new ApplicationException(ErrorCode.FORBIDDEN_COMMENT_ACCESS); // 예외 처리
+        }
+
         postRepository.delete(post);  // 게시물 삭제
     }
 
-
+    // 게시물 작성자인지 확인
+    public boolean checkPostOwnership(@Auth AuthUser authUser, Long postId, Long userId) {
+        authUser.getEmail();
+        return postRepository.findById(postId)
+                .map(post -> post.getUser().getId().equals(userId))
+                .orElse(false);  // 게시물이 없으면 false 반환
+    }
 }
