@@ -10,11 +10,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import jakarta.servlet.Filter;
 
 import java.io.IOException;
-
-
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,7 +26,6 @@ public class JwtFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
@@ -37,6 +33,12 @@ public class JwtFilter implements Filter {
 
         //가입, 로그인은 jwt 체크 불필요
         if (url.startsWith("/auth/signup") || url.startsWith("/auth/signin")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        // 정적 리소스에 대한 요청은 JWT 검증을 생략
+        if (url.startsWith("/images/") || url.startsWith("/css/") || url.startsWith("/js/") || url.startsWith("/webjars/")) {
             chain.doFilter(request, response);
             return;
         }
@@ -57,13 +59,10 @@ public class JwtFilter implements Filter {
             Claims claims = jwtUtil.extractClaims(jwt);
 
             // 사용자 정보를 ArgumentResolver 로 넘기기 위해 HttpServletRequest 에 세팅
-
-
             httpRequest.setAttribute("userId", Long.parseLong(claims.getSubject()));
             httpRequest.setAttribute("email", claims.get("email", String.class));
 
             chain.doFilter(request, response);
-
 
         } catch (SecurityException | MalformedJwtException e) {
             log.error("Invalid JWT signature, 유효하지 않는 JWT 서명입니다. URL: {}", url, e);
@@ -87,6 +86,4 @@ public class JwtFilter implements Filter {
     public void destroy() {
         Filter.super.destroy();
     }
-
-
 }

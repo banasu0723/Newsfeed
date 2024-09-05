@@ -27,8 +27,7 @@ public class User extends Timestamped {
     @Column(nullable = false)
     private String name;
 
-    @Column(length = 100)
-    private String image;
+    private String profileImage;
 
     @Column(length = 255)
     private String introduction;
@@ -36,22 +35,20 @@ public class User extends Timestamped {
     @Column(nullable = false)
     private boolean activate;
 
-    // 친구 리스트
     @OneToMany(mappedBy = "user")
     private List<Friendship> friendshipUserList = new ArrayList<>();
 
-
     public User(String email, String password, String userName) {
         this.email = email;
-        this.password=password;
-        this.name=userName;
+        this.password = password;
+        this.name = userName;
         this.activate = true;
     }
 
     public void updateProfile(String name, String introduction, String profileImage) {
         this.name = name;
-        this.image = profileImage;
         this.introduction = introduction;
+        this.profileImage = profileImage;
     }
 
     public void changePassword(String newPassword) {
