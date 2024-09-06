@@ -56,12 +56,12 @@ Communication
 
 # 📊 ERD
 
-![image](https://github.com/user-attachments/assets/19c2a294-4761-42dd-bc4d-f4aa0b75a7fa)
+![image](https://github.com/user-attachments/assets/66931642-d6df-432a-bc4f-2de9027676b9)
+
 
 # SQL(MySQL)
 
-```
-sql
+```sql
 Table users {
   id bigint [primary key]
   email varchar(50) [not null, unique]
@@ -81,6 +81,8 @@ Table posts {
   body text [note: 'Content of the post', not null] 
   created_at timestamp  [not null]
   modified_at timestamp [not null]
+  like_count int [not null]
+
 }
 
 Table friendship {
@@ -95,6 +97,13 @@ Table friendship {
   friend_email varchar(50) [not null]
 }
 
+Table likes {
+  id bigint [primary key]
+  post_id bigint [not null]
+  comment_id bigint [not null]
+  user_id bigint [not null]
+}
+
 Table comments {
   id bigint [primary key]
   post_id bigint [not null]
@@ -102,7 +111,9 @@ Table comments {
   body text [not null]
   created_at timestamp [not null]
   modified_at timestamp [not null]
+  like_count int [not null]
 }
+
 
 Ref: posts.user_id > users.id // many-to-one
 
@@ -113,6 +124,14 @@ Ref: users.id < friendship.friend_id
 Ref: comments.post_id > posts.id
 
 Ref: comments.user_id > users.id
+
+Ref: likes.comment_id > comments.id
+
+Ref: likes.post_id > posts.id
+
+Ref: likes.user_id > users.id
+
+
 
 ```
 
@@ -167,8 +186,9 @@ Ref: comments.user_id > users.id
 │   │                           ├── common
 │   │                           │   ├── Timestamped.class
 │   │                           │   └── exception
-│   │                           │       ├── CustomException.class
-│   │                           │       ├── ExceptionMessage.class
+│   │                           │       ├── ApplicationException.class
+│   │                           │       ├── ErrorCode.class
+│   │                           │       ├── ErrorResponse.class
 │   │                           │       └── GlobalExceptionHandler.class
 │   │                           ├── friendship
 │   │                           │   ├── FriendshipRequestStatus.class
@@ -176,7 +196,8 @@ Ref: comments.user_id > users.id
 │   │                           │   ├── controller
 │   │                           │   │   └── FriendshipController.class
 │   │                           │   ├── dto
-│   │                           │   │   └── FriendshipRequestDto.class
+│   │                           │   │   ├── FriendshipRequestDto.class
+│   │                           │   │   └── FriendshipResponseDto.class
 │   │                           │   ├── entity
 │   │                           │   │   ├── Friendship$FriendshipBuilder.class
 │   │                           │   │   └── Friendship.class
@@ -184,6 +205,12 @@ Ref: comments.user_id > users.id
 │   │                           │   │   └── FriendshipRepository.class
 │   │                           │   └── service
 │   │                           │       └── FriendshipService.class
+│   │                           ├── likes
+│   │                           │   ├── Like$LikeBuilder.class
+│   │                           │   ├── Like.class
+│   │                           │   ├── LikeController.class
+│   │                           │   ├── LikeRepository.class
+│   │                           │   └── LikeService.class
 │   │                           ├── posts
 │   │                           │   ├── controller
 │   │                           │   │   └── PostController.class
@@ -200,10 +227,10 @@ Ref: comments.user_id > users.id
 │   │                           │       └── PostService.class
 │   │                           ├── profiles
 │   │                           │   ├── controller
+│   │                           │   │   ├── ImageController.class
 │   │                           │   │   └── ProfileController.class
 │   │                           │   ├── dto
 │   │                           │   │   ├── PasswordUpdateRequestDto.class
-│   │                           │   │   ├── PostResponseDto.class
 │   │                           │   │   ├── ProfileResponseDto.class
 │   │                           │   │   └── ProfileUpdateRequestDto.class
 │   │                           │   └── service
@@ -224,22 +251,25 @@ Ref: comments.user_id > users.id
 │   ├── resources
 │   │   └── main
 │   │       ├── application-local.yaml
-│   │       └── application.yaml
+│   │       ├── application.yaml
+│   │       └── static
+│   │           └── images
+│   │               └── 53d9f8fb-3aed-4c8b-85d2-57ba3fcf2541_image.png
 │   └── tmp
 │       └── compileJava
 │           ├── compileTransaction
 │           │   ├── backup-dir
 │           │   └── stash-dir
-│           │       ├── FriendshipController.class.uniqueId4
-│           │       ├── FriendshipRepository.class.uniqueId9
-│           │       ├── FriendshipService.class.uniqueId7
-│           │       ├── Post$PostBuilder.class.uniqueId6
-│           │       ├── Post.class.uniqueId3
-│           │       ├── PostController.class.uniqueId0
-│           │       ├── PostRepository.class.uniqueId2
-│           │       ├── PostResponseDto$PostData.class.uniqueId8
-│           │       ├── PostResponseDto.class.uniqueId1
-│           │       └── PostService.class.uniqueId5
+│           │       
+│           │       
+│           │       
+│           │      
+│           │      
+│           │      
+│           │      
+│           │      
+│           │      
+│           │      
 │           └── previous-compilation-data.bin
 ├── build.gradle
 ├── gradle
@@ -295,8 +325,9 @@ Ref: comments.user_id > users.id
     │   │                   ├── common
     │   │                   │   ├── Timestamped.java
     │   │                   │   └── exception
-    │   │                   │       ├── CustomException.java
-    │   │                   │       ├── ExceptionMessage.java
+    │   │                   │       ├── ApplicationException.java
+    │   │                   │       ├── ErrorCode.java
+    │   │                   │       ├── ErrorResponse.java
     │   │                   │       └── GlobalExceptionHandler.java
     │   │                   ├── friendship
     │   │                   │   ├── FriendshipRequestStatus.java
@@ -304,13 +335,19 @@ Ref: comments.user_id > users.id
     │   │                   │   ├── controller
     │   │                   │   │   └── FriendshipController.java
     │   │                   │   ├── dto
-    │   │                   │   │   └── FriendshipRequestDto.java
+    │   │                   │   │   ├── FriendshipRequestDto.java
+    │   │                   │   │   └── FriendshipResponseDto.java
     │   │                   │   ├── entity
     │   │                   │   │   └── Friendship.java
     │   │                   │   ├── repository
     │   │                   │   │   └── FriendshipRepository.java
     │   │                   │   └── service
     │   │                   │       └── FriendshipService.java
+    │   │                   ├── likes
+    │   │                   │   ├── Like.java
+    │   │                   │   ├── LikeController.java
+    │   │                   │   ├── LikeRepository.java
+    │   │                   │   └── LikeService.java
     │   │                   ├── posts
     │   │                   │   ├── controller
     │   │                   │   │   └── PostController.java
@@ -325,10 +362,10 @@ Ref: comments.user_id > users.id
     │   │                   │       └── PostService.java
     │   │                   ├── profiles
     │   │                   │   ├── controller
+    │   │                   │   │   ├── ImageController.java
     │   │                   │   │   └── ProfileController.java
     │   │                   │   ├── dto
     │   │                   │   │   ├── PasswordUpdateRequestDto.java
-    │   │                   │   │   ├── PostResponseDto.java
     │   │                   │   │   ├── ProfileResponseDto.java
     │   │                   │   │   └── ProfileUpdateRequestDto.java
     │   │                   │   └── service
@@ -340,7 +377,10 @@ Ref: comments.user_id > users.id
     │   │                           └── UserRepository.java
     │   └── resources
     │       ├── application-local.yaml
-    │       └── application.yaml
+    │       ├── application.yaml
+    │       └── static
+    │           └── images
+    │               └── 53d9f8fb-3aed-4c8b-85d2-57ba3fcf2541_image.png
     └── test
         └── java
             └── org
@@ -348,7 +388,7 @@ Ref: comments.user_id > users.id
                     └── newsfeed
                         └── NewsfeedApplicationTests.java
 
-109 directories, 120 files
+115 directories, 135 files
 ```
 
 # API 명세
@@ -368,14 +408,15 @@ Ref: comments.user_id > users.id
 | 로그인      | `POST`   | `/auth/signin`                         | Body    | JWT           | `200 : 정상처리` |
 | 친구 요청    | `POST`   | `/friendships`                         | Body    | 요청 메시지        | `200 : 정상요청` |
 | 친구 수락    | `PATCH`  | `/friendships`                         | -       | 수락 메시지        | `200 : 정상요청` |
-| 친구 삭제    | `DELETE` | `/friendships/{friendshipsid}`         | -       | 삭제 메시지        | `200 : 정상삭제` |
-| 친구 거절    | `DELETE` | `/friendships/reject`                  | -       | -             | `200 : 정상요청` |
+| 친구 삭제 및 거절    | `DELETE` | `/friendships/{friendshipsid}`         | -       | 거절(삭제) 메시지        | `200 : 정상삭제` |
 | 친구 리스트   | `GET`    | `/friendships`                         | -       | 친구 리스트        | `200 : 정상조회` |
-| 친구 요청 조회 |          |                                        | -       | -             | `200 : 정상조회` |
+| 친구 요청 조회 |   `GET`   |`/freindships/request`                   | -       | -             | `200 : 정상조회` |
 | 댓글 작성    | `POST`   | `/posts/{postId}/comments`             | Body    | 작성한 댓글 내용     | `200 : 정상생성` |
 | 댓글 조회    | `GET`    | `/posts/{postId}/comments`             | -       | 댓글 내용         | `200 : 정상조회` |
 | 댓글 수정    | `PUT`    | `/posts/{postId}/comments/{commentId}` | Body    | 수정한 댓글 내용     | `200 : 정상수정` |
 | 댓글 삭제    | `DELETE` | `/posts/{postId}/comments/{commentId}` | -       | 삭제 메시지        | `200 : 정상삭제` |
+| 뉴스피드 좋아요| `POST`    |`/likes/{postId}`                    |    -      | 좋아요 확인 및 취소 메시지   | `200 : 정상 반영` |
+| 댓글 좋아요| `POST`    |`/likes/{postId}/{coomentId}`           |    -      | 좋아요 확인 및 취소 메시지   | `200 : 정상 반영` |
 
 # ⚒️주요 기능
 
@@ -429,7 +470,8 @@ Ref: comments.user_id > users.id
 6. 친구 요청 조회
   > 친구 요청들을 조회합니다.
 
-- **댓글 관련 기능**
+---
+### **댓글 관련 기능**
 1. 댓글 작성
   > 특정 게시물에 댓글을 작성합니다.
 2. 댓글 조회
@@ -438,4 +480,12 @@ Ref: comments.user_id > users.id
   > 댓글 작성자와 현 로그인 유저가 동일할 경우 해당 댓글을 수정합니다.
 4. 댓글 삭제
   > 댓글 작성자와 현 로그인 유저가 동일할 경우 해당 댓글을 삭제합니다.
+
+
 ---
+### **좋아요 관련 기능**
+1. 뉴스피드 좋아요
+  > 내 친구의 뉴스피드에 좋아요를 남기거나 취소할 수 있습니다.
+
+2 . 댓글 좋아요
+  > 본인이 작성한 댓글을 제외한 모든 댓글에 좋아요를 누르거나 취소할 수 있습니다.
